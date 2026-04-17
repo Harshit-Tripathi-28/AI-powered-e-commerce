@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cart – H2P Vision</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:sans-serif;background:#f5f6fa;margin:0}
+nav{background:#0D1B2A;color:#fff;padding:15px 30px;font-weight:bold}
+.container{max-width:1000px;margin:30px auto;background:#fff;padding:20px;border-radius:10px}
+.cart-item{display:flex;justify-content:space-between;border-bottom:1px solid #ddd;padding:15px 0}
+.cart-item img{width:70px;height:70px;object-fit:cover;border-radius:8px}
+.item-info{flex:1;margin-left:15px}
+.qty{display:flex;gap:5px}
+button{cursor:pointer}
+.total{font-size:1.2rem;font-weight:bold;margin-top:20px;text-align:right}
+.checkout{background:#FFB700;padding:10px 20px;border:none;border-radius:6px;margin-top:10px;float:right}
+</style>
+</head>
+
+<body>
+
+<nav>🛒 Your Cart</nav>
+
+<div class="container" id="cartContainer">
+  <h2>Cart Items</h2>
+  <div id="cartItems"></div>
+  <div class="total" id="totalPrice"></div>
+  <button class="checkout" onclick="checkout()">Checkout</button>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function renderCart(){
+  const container = document.getElementById("cartItems");
+  if(cart.length === 0){
+    container.innerHTML = "<p>Cart is empty 😢</p>";
+    document.getElementById("totalPrice").innerText = "";
+    return;
+  }
+
+  let total = 0;
+
+  container.innerHTML = cart.map((item,index)=>{
+    total += item.price * item.qty;
+    return `
+    <div class="cart-item">
+      <img src="${item.img}">
+      <div class="item-info">
+        <div>${item.title}</div>
+        <div>₹${item.price}</div>
+        <div class="qty">
+          <button onclick="changeQty(${index},-1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${index},1)">+</button>
+        </div>
+      </div>
+      <button onclick="removeItem(${index})">❌</button>
+    </div>
+    `;
+  }).join("");
+
+  document.getElementById("totalPrice").innerText = "Total: ₹" + total;
+}
+
+function changeQty(i,delta){
+  cart[i].qty += delta;
+  if(cart[i].qty <= 0) cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function removeItem(i){
+  cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function checkout(){
+  alert("🚀 Order placed!");
+  localStorage.removeItem("cart");
+  renderCart();
+}
+
+renderCart();
+</script>
+
+</body>
+</html>

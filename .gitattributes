@@ -1,0 +1,5 @@
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.json filter=lfs diff=lfs merge=lfs -text
+data/reviews.csv filter=lfs diff=lfs merge=lfs -text
+reviews.csv filter=lfs diff=lfs merge=lfs -text

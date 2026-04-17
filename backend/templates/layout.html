@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>H2P Vision</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav>
+    <div class="logo">H2P Vision 🔥</div>
+    <div class="links">
+        <a href="/">Home</a>
+        <a href="/compare">Compare</a>
+        <a href="/tryon">Try-On</a>
+    </div>
+</nav>
+
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+
+<footer>
+    Built with ❤️ using Flask
+</footer>
+
+</body>
+</html>

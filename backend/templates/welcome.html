@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>H2P Vision</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0A0F1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Georgia, serif;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    /* Main splash container */
+    .splash {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* Logo SVG wrapper */
+    .logo-wrap {
+      width: 220px;
+      height: 220px;
+      opacity: 0;
+      transform: scale(0.3) rotate(-15deg);
+      animation: logoPop 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+    }
+
+    @keyframes logoPop {
+      0%   { opacity: 0; transform: scale(0.3) rotate(-15deg); }
+      60%  { transform: scale(1.08) rotate(3deg); opacity: 1; }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+
+    /* Brand name */
+    .brand {
+      font-family: "Arial Black", Arial, sans-serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #FF2020, #CC0000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 0.7s ease 1.0s forwards;
+      letter-spacing: 1px;
+      margin-top: -10px;
+    }
+
+    /* Tagline */
+    .tagline {
+      font-size: 1.15rem;
+      font-style: italic;
+      color: #ffffffcc;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 0.6s ease 1.5s forwards;
+      letter-spacing: 2px;
+      margin-top: 6px;
+    }
+
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading bar */
+    .loader-wrap {
+      margin-top: 40px;
+      width: 220px;
+      height: 3px;
+      background: #ffffff15;
+      border-radius: 10px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 1.8s forwards;
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #FFB700, #FF4EA0, #A855F7, #00D4FF);
+      animation: loadProgress 1.6s ease 2.0s forwards;
+    }
+
+    @keyframes loadProgress {
+      0%   { width: 0%; }
+      30%  { width: 40%; }
+      70%  { width: 75%; }
+      100% { width: 100%; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Tagline dots */
+    .dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 2.0s forwards;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF4EA0, #A855F7);
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; background: linear-gradient(135deg, #A855F7, #00D4FF); }
+    .dot:nth-child(3) { animation-delay: 0.4s; background: linear-gradient(135deg, #00D4FF, #FFB700); }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50%       { transform: scale(1.5); opacity: 1; }
+    }
+
+    /* Full screen fade out */
+    .splash-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #0A0F1E;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: splashFadeOut 0.7s ease 3.8s forwards;
+    }
+
+    @keyframes splashFadeOut {
+      0%   { opacity: 1; pointer-events: all; }
+      100% { opacity: 0; pointer-events: none; }
+    }
+
+    /* Main site content (hidden behind splash) */
+    .main-content {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      animation: fadeIn 0.7s ease 3.8s forwards;
+      background: #0D1B2A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: Georgia, serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MAIN SITE (loads behind splash) -->
+  <div class="main-content">
+    <!-- Replace this with your actual index.html content / Flask redirect -->
+    <h1 style="color:#00C9FF; font-size:2rem;">Welcome to H2P Vision</h1>
+  </div>
+
+  <!-- SPLASH SCREEN -->
+  <div class="splash-screen">
+
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Logo + Text -->
+    <div class="splash">
+
+      <!-- Inline SVG Logo -->
+      <div class="logo-wrap">
+        <svg width="100%" height="100%" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bagG" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FFB700"/>
+              <stop offset="35%" style="stop-color:#FF4EA0"/>
+              <stop offset="70%" style="stop-color:#A855F7"/>
+              <stop offset="100%" style="stop-color:#00D4FF"/>
+            </linearGradient>
+            <linearGradient id="curG" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#FF8C00"/>
+              <stop offset="50%" style="stop-color:#FF3CAC"/>
+              <stop offset="100%" style="stop-color:#A855F7"/>
+            </linearGradient>
+          </defs>
+          <!-- Bag body -->
+          <path d="M130 180 L130 370 Q130 395 155 395 L345 395 Q370 395 370 370 L370 180 Z"
+                fill="none" stroke="url(#bagG)" stroke-width="14" stroke-linejoin="round"/>
+          <!-- Bag handle -->
+          <path d="M195 180 Q195 115 250 115 Q305 115 305 180"
+                fill="none" stroke="url(#bagG)" stroke-width="14" stroke-linecap="round"/>
+          <!-- Cursor -->
+          <g transform="translate(100,255) rotate(-20)">
+            <path d="M0 0 L0 60 L16 43 L28 70 L38 66 L26 39 L48 39 Z" fill="url(#curG)"/>
+            <line x1="-13" y1="53" x2="-4" y2="44" stroke="url(#curG)" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+            <line x1="-20" y1="64" x2="-9" y2="54" stroke="url(#curG)" stroke-width="3" stroke-linecap="round" opacity="0.55"/>
+            <line x1="-27" y1="75" x2="-14" y2="64" stroke="url(#curG)" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="brand">H2P Vision</div>
+      <div class="tagline">Trust before you buy</div>
+
+      <div class="loader-wrap">
+        <div class="loader-bar"></div>
+      </div>
+
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Generate floating particles
+    const container = document.getElementById('particles');
+    const colors = ['#FFB700','#FF4EA0','#A855F7','#00D4FF','#FF3CAC'];
+
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 6 + 3;
+      p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${Math.random() * 5 + 4}s;
+        animation-delay: ${Math.random() * 3}s;
+      `;
+      container.appendChild(p);
+    }
+
+    // After splash ends, redirect to Flask home
+    // Uncomment below line when integrating with Flask:
+    setTimeout(() => { window.location.href = "/home"; }, 4500);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>H2P Vision – Trust before you buy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #0A0F1E;
+      --navy2:  #0D1B2A;
+      --navy3:  #16213e;
+      --red:    #CC0000;
+      --red2:   #FF2020;
+      --orange: #FFB700;
+      --pink:   #FF4EA0;
+      --purple: #A855F7;
+      --cyan:   #00D4FF;
+      --light:  #F5F6FA;
+      --white:  #ffffff;
+      --text:   #1a1a2e;
+      --muted:  #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 24px rgba(0,0,0,0.10);
+      --shadow-h: 0 12px 40px rgba(0,0,0,0.18);
+      --grad-logo: linear-gradient(135deg,#FFB700,#FF4EA0,#A855F7,#00D4FF);
+      --grad-red:  linear-gradient(135deg,#FF2020,#CC0000);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--text);overflow-x:hidden;}
+
+    /* TOP BAR */
+    .top-bar{background:var(--navy);color:#ffffff70;font-size:0.73rem;text-align:center;padding:7px 0;letter-spacing:.6px;}
+    .top-bar b{color:var(--orange);}
+
+    /* NAVBAR */
+    nav{background:var(--navy2);padding:0 32px;height:68px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:999;box-shadow:0 2px 24px rgba(0,0,0,.5);}
+    .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+    .logo-wrap img{height:48px;width:48px;object-fit:contain;filter:drop-shadow(0 0 8px #FF4EA040);}
+    .logo-text .n{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+    .logo-text .t{font-size:.6rem;color:#ffffff45;letter-spacing:1.8px;font-style:italic;}
+
+    .search-bar{flex:1;max-width:580px;display:flex;height:42px;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .25s;}
+    .search-bar:focus-within{border-color:var(--orange);}
+    .search-bar select{background:#e8eaf0;border:none;padding:0 10px;font-size:.78rem;font-family:'DM Sans',sans-serif;color:#374151;outline:none;cursor:pointer;}
+    .search-bar input{flex:1;border:none;padding:0 14px;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;background:#fff;}
+    .search-bar button{background:var(--orange);border:none;width:48px;font-size:1.1rem;cursor:pointer;transition:background .2s;}
+    .search-bar button:hover{background:#e6a500;}
+
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:20px;}
+    .nav-ico{display:flex;flex-direction:column;align-items:center;color:#ffffffbb;text-decoration:none;font-size:.7rem;gap:2px;cursor:pointer;transition:color .2s;}
+    .nav-ico:hover{color:var(--orange);}
+    .nav-ico span{font-size:1.35rem;}
+    .nav-login{background:transparent;border:1.5px solid #ffffff40;color:#ffffffcc;padding:8px 16px;border-radius:7px;font-size:.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;}
+    .nav-login:hover{border-color:var(--orange);color:var(--orange);}
+    .nav-cart{position:relative;background:var(--orange);color:var(--navy);border:none;padding:9px 18px;border-radius:8px;font-weight:600;font-size:.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;}
+    .nav-cart:hover{background:#e6a500;transform:scale(1.03);}
+    .cart-count{position:absolute;top:-7px;right:-7px;background:var(--red2);color:white;font-size:.6rem;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+    /* SUB NAV */
+    .sub-nav{background:var(--navy3);padding:0 32px;height:36px;display:flex;align-items:center;gap:4px;overflow-x:auto;}
+    .sub-nav::-webkit-scrollbar{display:none;}
+    .sub-nav a{color:#ffffffbb;text-decoration:none;font-size:.78rem;white-space:nowrap;padding:4px 13px;border-radius:4px;transition:all .18s;}
+    .sub-nav a:hover{background:#ffffff15;color:white;}
+    .sub-nav a.fire{color:var(--orange);font-weight:600;}
+    .sub-nav a.new-tag{color:var(--cyan);font-weight:600;}
+
+    /* HERO */
+    .hero{background:linear-gradient(135deg,var(--navy) 0%,#0f1f3d 55%,#1a0a2e 100%);min-height:480px;display:flex;align-items:center;padding:60px;gap:40px;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-120px;right:-120px;width:520px;height:520px;background:radial-gradient(circle,#FF4EA025 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:-80px;left:25%;width:420px;height:420px;background:radial-gradient(circle,#A855F720 0%,transparent 65%);pointer-events:none;}
+    .hero-orb{position:absolute;top:40px;left:40%;width:300px;height:300px;background:radial-gradient(circle,#00D4FF10,transparent 70%);animation:orbFloat 6s ease-in-out infinite;pointer-events:none;}
+    @keyframes orbFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-30px);}}
+
+    .hero-left{flex:1;z-index:2;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #FF4EA050;background:#FF4EA012;color:var(--pink);font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:1px;margin-bottom:22px;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:900;color:white;line-height:1.18;margin-bottom:16px;}
+    .hero h1 .grad{background:var(--grad-logo);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero p{color:#ffffffaa;font-size:1rem;line-height:1.7;max-width:480px;margin-bottom:32px;}
+
+    .hero-search{display:flex;max-width:500px;height:52px;border-radius:10px;overflow:hidden;box-shadow:0 4px 30px rgba(255,183,0,.25);margin-bottom:28px;}
+    .hero-search input{flex:1;border:none;padding:0 18px;font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;}
+    .hero-search button{background:var(--orange);border:none;padding:0 24px;font-size:.9rem;font-weight:600;font-family:'DM Sans',sans-serif;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s;}
+    .hero-search button:hover{background:#e6a500;}
+
+    .hero-stats{display:flex;gap:36px;}
+    .stat-item .num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;background:var(--grad-logo);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stat-item .lbl{font-size:.72rem;color:#ffffff60;letter-spacing:.5px;}
+
+    .hero-right{flex:0 0 360px;z-index:2;display:flex;flex-direction:column;gap:14px;}
+    .hero-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(10px);animation:cardSlide .6s ease both;transition:transform .2s,border-color .2s;}
+    .hero-card:hover{transform:translateX(6px);border-color:rgba(255,255,255,.25);}
+    .hero-card:nth-child(2){animation-delay:.15s;}
+    .hero-card:nth-child(3){animation-delay:.3s;}
+    @keyframes cardSlide{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+    .hcard-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+    .hcard-title{font-size:.9rem;font-weight:600;color:white;margin-bottom:2px;}
+    .hcard-sub{font-size:.75rem;color:#ffffff60;}
+
+    /* TRUST STRIP */
+    .trust-strip{background:white;border-bottom:1px solid var(--border);padding:18px 60px;display:flex;align-items:center;justify-content:space-around;gap:20px;}
+    .trust-item{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--muted);}
+    .trust-item span{font-size:1.4rem;}
+    .trust-item b{color:var(--text);font-weight:600;}
+
+    /* SECTION */
+    .section{padding:48px 60px;}
+    .sec-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:28px;}
+    .sec-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);}
+    .sec-title .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--grad-logo);margin-left:6px;vertical-align:middle;}
+    .sec-link{color:var(--red);font-size:.83rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:4px;}
+    .sec-link:hover{text-decoration:underline;}
+
+    /* CATEGORIES */
+    .cat-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:16px;}
+    .cat-card{background:white;border-radius:14px;padding:20px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;border:2px solid transparent;transition:all .22s;box-shadow:var(--shadow);text-decoration:none;}
+    .cat-card:hover{border-color:var(--orange);transform:translateY(-4px);box-shadow:var(--shadow-h);}
+    .cat-icon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+    .cat-name{font-size:.76rem;font-weight:500;color:var(--text);text-align:center;}
+
+    /* PRODUCTS */
+    .product-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+    .product-card{background:white;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);border:2px solid transparent;transition:all .22s;cursor:pointer;position:relative;}
+    .product-card:hover{border-color:var(--orange);transform:translateY(-5px);box-shadow:var(--shadow-h);}
+    .product-img{width:100%;aspect-ratio:1;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden;}
+    .wishlist-btn{position:absolute;top:10px;right:10px;background:white;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.12);z-index:2;transition:transform .2s;}
+    .wishlist-btn:hover{transform:scale(1.15);}
+    .badge-new{position:absolute;top:10px;left:10px;background:var(--cyan);color:var(--navy);font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:4px;z-index:2;}
+    .badge-sale{position:absolute;top:10px;left:10px;background:var(--red2);color:white;font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:4px;z-index:2;}
+    .product-info{padding:14px 14px 16px;}
+    .product-brand{font-size:.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+    .product-name{font-size:.88rem;font-weight:500;color:var(--text);margin-bottom:8px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+    /* TRUST METER */
+    .trust-meter{margin-bottom:10px;}
+    .trust-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+    .trust-label{font-size:.68rem;font-weight:600;letter-spacing:.3px;}
+    .trust-label.high{color:#16a34a;}
+    .trust-label.medium{color:#d97706;}
+    .trust-label.low{color:#dc2626;}
+    .trust-score-num{font-size:.72rem;font-weight:700;color:var(--muted);}
+    .trust-bar-bg{height:5px;background:#e5e7eb;border-radius:10px;overflow:hidden;}
+    .trust-bar-fill{height:100%;border-radius:10px;transition:width .8s ease;}
+    .trust-bar-fill.high{background:linear-gradient(90deg,#16a34a,#4ade80);}
+    .trust-bar-fill.medium{background:linear-gradient(90deg,#d97706,#fbbf24);}
+    .trust-bar-fill.low{background:linear-gradient(90deg,#dc2626,#f87171);}
+
+    .product-price-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+    .price-now{font-size:1.1rem;font-weight:700;color:var(--text);}
+    .price-old{font-size:.78rem;color:var(--muted);text-decoration:line-through;}
+    .price-off{font-size:.72rem;font-weight:600;color:#16a34a;background:#dcfce7;padding:2px 6px;border-radius:4px;}
+    .stars{display:flex;align-items:center;gap:3px;margin-bottom:12px;font-size:.75rem;color:var(--muted);}
+    .stars .s{color:var(--orange);font-size:.85rem;}
+    .btn-add{width:100%;background:var(--navy2);color:white;border:none;padding:10px;border-radius:8px;font-size:.83rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;}
+    .btn-add:hover{background:var(--red);transform:scale(1.02);}
+
+    /* BANNER */
+    .banner-strip{padding:0 60px 48px;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .banner-card{border-radius:16px;padding:36px 40px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative;min-height:160px;}
+    .banner-card.dark{background:linear-gradient(135deg,var(--navy),#1a0a2e);}
+    .banner-card.warm{background:linear-gradient(135deg,#7c2d12,#c2410c);}
+    .banner-info{z-index:1;}
+    .banner-tag{font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+    .banner-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:white;margin-bottom:16px;}
+    .banner-btn{background:white;color:var(--navy);border:none;padding:9px 20px;border-radius:8px;font-size:.82rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;}
+    .banner-btn:hover{transform:scale(1.04);}
+    .banner-emoji{font-size:4.5rem;opacity:.8;z-index:1;}
+
+    /* HOW IT WORKS */
+    .how-section{background:var(--navy2);padding:60px;}
+    .how-section .sec-title{color:white;}
+    .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+    .how-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:32px 28px;transition:all .25s;position:relative;overflow:hidden;}
+    .how-card::before{content:attr(data-num);position:absolute;top:-10px;right:16px;font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;color:rgba(255,255,255,.04);line-height:1;}
+    .how-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22);transform:translateY(-5px);}
+    .how-icon-wrap{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin-bottom:20px;}
+    .how-card-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:white;margin-bottom:10px;}
+    .how-card-sub{font-size:.83rem;color:#ffffff65;line-height:1.65;margin-bottom:18px;}
+    .how-tag{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:20px;}
+
+    /* TICKER */
+    .deals-ticker{background:var(--red);padding:10px 0;overflow:hidden;white-space:nowrap;}
+    .ticker-inner{display:inline-flex;gap:60px;animation:tickerMove 22s linear infinite;}
+    @keyframes tickerMove{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+    .ticker-item{color:white;font-size:.8rem;font-weight:500;display:flex;align-items:center;gap:8px;}
+
+    /* TRENDING */
+    .recent-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
+    .recent-card{background:white;border-radius:12px;padding:16px;text-align:center;cursor:pointer;box-shadow:var(--shadow);border:2px solid transparent;transition:all .2s;}
+    .recent-card:hover{border-color:var(--purple);transform:translateY(-3px);}
+    .recent-card .ri{font-size:2.2rem;margin-bottom:8px;}
+    .recent-card .rn{font-size:.75rem;color:var(--text);font-weight:500;}
+    .recent-card .rp{font-size:.85rem;font-weight:700;color:var(--red);margin-top:4px;}
+
+    /* FOOTER */
+    footer{background:var(--navy);color:#ffffff80;padding:50px 60px 24px;}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+    .footer-brand .n{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;}
+    .footer-brand p{font-size:.82rem;line-height:1.7;color:#ffffff55;max-width:260px;}
+    .footer-col h4{color:white;font-size:.88rem;font-weight:600;margin-bottom:14px;}
+    .footer-col a{display:block;color:#ffffff55;text-decoration:none;font-size:.8rem;margin-bottom:8px;transition:color .2s;}
+    .footer-col a:hover{color:var(--orange);}
+    .footer-bottom{border-top:1px solid #ffffff15;padding-top:20px;display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#ffffff35;}
+    .footer-socials{display:flex;gap:12px;}
+    .social-btn{width:32px;height:32px;border-radius:8px;background:#ffffff10;display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:background .2s;text-decoration:none;color:white;}
+    .social-btn:hover{background:#ffffff22;}
+
+    .loading-spinner{text-align:center;padding:40px;color:var(--muted);font-size:.9rem;}
+
+    @media(max-width:1100px){.product-grid{grid-template-columns:repeat(4,1fr);}.cat-grid{grid-template-columns:repeat(4,1fr);}.recent-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:768px){nav{padding:0 14px;}.hero{padding:36px 20px;flex-direction:column;}.hero-right{display:none;}.section{padding:32px 20px;}.product-grid{grid-template-columns:repeat(2,1fr);}.how-grid{grid-template-columns:1fr;}.banner-strip{grid-template-columns:1fr;padding:0 20px 32px;}.footer-grid{grid-template-columns:1fr 1fr;}.trust-strip{flex-wrap:wrap;padding:14px 20px;}}
+  </style>
+</head>
+<body>
+
+<div class="top-bar">🎉 Welcome to H2P Vision — <b>AI-powered shopping</b> with real Trust Scores. Shop smarter today!</div>
+
+<nav>
+  <a href="/" class="logo-wrap">
+    <img src="/static/logo.svg" alt="H2P Vision" onerror="this.style.display='none'"/>
+    <div class="logo-text">
+      <div class="n">H2P Vision</div>
+      <div class="t">Trust before you buy</div>
+    </div>
+  </a>
+  <div class="search-bar">
+    <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Shoes</option><option>Beauty</option></select>
+    <input type="text" id="searchInput" placeholder="Search products, brands and more..."/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="nav-right">
+    <a href="/tryon" class="nav-ico"><span>👗</span><div>Try On</div></a>
+    <a href="/compare" class="nav-ico"><span>⚖️</span><div>Compare</div></a>
+    <a href="/login" class="nav-login">Sign In</a>
+    <button class="nav-cart" onclick="window.location='/cart'">🛒 Cart<div class="cart-count" id="cartCount">0</div></button>
+  </div>
+</nav>
+
+<div class="sub-nav">
+  <a href="#" class="fire">🔥 Today's Deals</a>
+  <a href="#">Electronics</a><a href="#">Fashion</a><a href="#">Home & Kitchen</a>
+  <a href="#">Beauty</a><a href="#">Sports</a><a href="#">Books</a><a href="#">Toys</a>
+  <a href="/compare" class="new-tag">✨ CompareX™</a>
+  <a href="/tryon" class="new-tag">🪞 TryNow™</a>
+  <a href="#trust">🛡 TrustMeter™</a>
+</div>
+
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-left">
+    <div class="hero-badge">✦ AI-POWERED TRUST SHOPPING</div>
+    <h1>Shop Smarter.<br/>Buy with <span class="grad">Confidence.</span></h1>
+    <p>H2P Vision uses AI to detect fake reviews, score product trust, compare prices across platforms, and let you try before you buy.</p>
+    <div class="hero-search">
+      <input type="text" id="heroSearch" placeholder="Search for iPhone, Nike, Samsung..."/>
+      <button onclick="doHeroSearch()">🔍 Search</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="num">50K+</div><div class="lbl">Trusted Products</div></div>
+      <div class="stat-item"><div class="num">98%</div><div class="lbl">Fake Review Detected</div></div>
+      <div class="stat-item"><div class="num">5★</div><div class="lbl">User Rating</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hcard-icon" style="background:linear-gradient(135deg,#FFB70020,#FF4EA020)">🛡️</div>
+      <div><div class="hcard-title">TrustMeter™</div><div class="hcard-sub">AI trust score from real reviews</div></div>
+    </div>
+    <div class="hero-card">
+      <div class="hcard-icon" style="background:linear-gradient(135deg,#A855F720,#00D4FF20)">⚖️</div>
+      <div><div class="hcard-title">CompareX™</div><div class="hcard-sub">Best price across all platforms</div></div>
+    </div>
+    <div class="hero-card">
+      <div class="hcard-icon" style="background:linear-gradient(135deg,#FF202020,#CC000020)">🪞</div>
+      <div><div class="hcard-title">TryNow™</div><div class="hcard-sub">Virtual try-on with your camera</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="trust-strip">
+  <div class="trust-item"><span>🛡️</span><div><b>AI Trust Score</b> on every product</div></div>
+  <div class="trust-item"><span>🔍</span><div><b>Fake Review Detection</b> via NLP</div></div>
+  <div class="trust-item"><span>⚖️</span><div><b>Cross-Platform</b> price comparison</div></div>
+  <div class="trust-item"><span>🪞</span><div><b>Virtual Try-On</b> before buying</div></div>
+  <div class="trust-item"><span>🚚</span><div><b>Free Delivery</b> above ₹499</div></div>
+</div>
+
+<div class="deals-ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item"><span>🔥</span>Up to 70% off Electronics</div>
+    <div class="ticker-item"><span>⚡</span>Flash Sale: Fashion from ₹299</div>
+    <div class="ticker-item"><span>🛡️</span>Trust Score on every product</div>
+    <div class="ticker-item"><span>🪞</span>Try glasses &amp; clothes virtually</div>
+    <div class="ticker-item"><span>🎁</span>500+ new products added today</div>
+    <div class="ticker-item"><span>⭐</span>Top Rated: 80+ Trust Score</div>
+    <div class="ticker-item"><span>🔥</span>Up to 70% off Electronics</div>
+    <div class="ticker-item"><span>⚡</span>Flash Sale: Fashion from ₹299</div>
+    <div class="ticker-item"><span>🛡️</span>Trust Score on every product</div>
+    <div class="ticker-item"><span>🪞</span>Try glasses &amp; clothes virtually</div>
+    <div class="ticker-item"><span>🎁</span>500+ new products added today</div>
+    <div class="ticker-item"><span>⭐</span>Top Rated: 80+ Trust Score</div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="sec-header">
+    <div class="sec-title">Shop by Category <span class="dot"></span></div>
+    <a href="#" class="sec-link">View all →</a>
+  </div>
+  <div class="cat-grid">
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">📱</div><div class="cat-name">Electronics</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8)">👗</div><div class="cat-name">Fashion</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">🏠</div><div class="cat-name">Home & Kitchen</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">💄</div><div class="cat-name">Beauty</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)">👟</div><div class="cat-name">Shoes</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">⚽</div><div class="cat-name">Sports</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd)">📚</div><div class="cat-name">Books</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef9c3,#fef08a)">🧸</div><div class="cat-name">Toys</div></a>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0" id="trust">
+  <div class="sec-header">
+    <div class="sec-title">Featured Products <span class="dot"></span></div>
+    <a href="#" class="sec-link">See all →</a>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <div class="loading-spinner">Loading trusted products...</div>
+  </div>
+</section>
+
+<div class="banner-strip">
+  <div class="banner-card dark">
+    <div class="banner-info">
+      <div class="banner-tag" style="color:var(--cyan)">✦ NEW FEATURE</div>
+      <div class="banner-title">Try Before<br/>You Buy</div>
+      <button class="banner-btn" onclick="window.location='/tryon'">Try Now →</button>
+    </div>
+    <div class="banner-emoji">🪞</div>
+  </div>
+  <div class="banner-card warm">
+    <div class="banner-info">
+      <div class="banner-tag" style="color:#fef08a">⚡ SMART COMPARE</div>
+      <div class="banner-title">Best Price<br/>Guaranteed</div>
+      <button class="banner-btn" onclick="window.location='/compare'">Compare Now →</button>
+    </div>
+    <div class="banner-emoji">⚖️</div>
+  </div>
+</div>
+
+<section class="how-section">
+  <div class="sec-title">How H2P Vision Works <span class="dot"></span></div>
+  <div class="how-grid">
+    <div class="how-card" data-num="01">
+      <div class="how-icon-wrap" style="background:linear-gradient(135deg,#FFB70020,#FF4EA020)">🛡️</div>
+      <div class="how-card-title">TrustMeter™</div>
+      <div class="how-card-sub">Our AI analyzes thousands of reviews using NLP and sentiment analysis to generate a 0–100 trust score. No more fake 5-star ratings fooling you.</div>
+      <span class="how-tag" style="background:#FFB70018;color:var(--orange)">✦ Naive Bayes + TextBlob</span>
+    </div>
+    <div class="how-card" data-num="02">
+      <div class="how-icon-wrap" style="background:linear-gradient(135deg,#A855F720,#00D4FF20)">⚖️</div>
+      <div class="how-card-title">CompareX™</div>
+      <div class="how-card-sub">Compare the same product across Amazon, Flipkart, Walmart, Shopee and more — price, rating, and trust score — all in one view.</div>
+      <span class="how-tag" style="background:#00D4FF18;color:var(--cyan)">✦ Cross-Platform Engine</span>
+    </div>
+    <div class="how-card" data-num="03">
+      <div class="how-icon-wrap" style="background:linear-gradient(135deg,#FF202020,#CC000020)">🪞</div>
+      <div class="how-card-title">TryNow™</div>
+      <div class="how-card-sub">Upload your photo and virtually try on glasses, clothes, and accessories using computer vision. See it on yourself before placing the order.</div>
+      <span class="how-tag" style="background:#FF4EA018;color:var(--pink)">✦ OpenCV Powered</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sec-header">
+    <div class="sec-title">Trending Right Now <span class="dot"></span></div>
+    <a href="#" class="sec-link">See all →</a>
+  </div>
+  <div class="recent-grid">
+    <div class="recent-card"><div class="ri">⌚</div><div class="rn">Smart Watch</div><div class="rp">₹2,499</div></div>
+    <div class="recent-card"><div class="ri">🎧</div><div class="rn">Headphones</div><div class="rp">₹1,299</div></div>
+    <div class="recent-card"><div class="ri">👟</div><div class="rn">Running Shoes</div><div class="rp">₹999</div></div>
+    <div class="recent-card"><div class="ri">💻</div><div class="rn">Laptop Stand</div><div class="rp">₹599</div></div>
+    <div class="recent-card"><div class="ri">📷</div><div class="rn">Camera Lens</div><div class="rp">₹4,999</div></div>
+    <div class="recent-card"><div class="ri">🕶️</div><div class="rn">Sunglasses</div><div class="rp">₹349</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="n">H2P Vision</div>
+      <p>AI-powered e-commerce platform with real trust scores, cross-platform comparison, and virtual try-on technology.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Features</h4>
+      <a href="#">TrustMeter™</a><a href="#">CompareX™</a><a href="#">TryNow™</a><a href="#">ReviewGuard™</a><a href="#">SmartBuy™</a>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="/login">Sign In</a><a href="/register">Register</a><a href="/cart">My Cart</a><a href="#">My Orders</a><a href="#">Wishlist</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">About Us</a><a href="#">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms</a><a href="#">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2025 H2P Vision. All rights reserved. | Built with ❤️ by Team H2P</div>
+    <div class="footer-socials">
+      <a class="social-btn" href="#">𝕏</a>
+      <a class="social-btn" href="#">in</a>
+      <a class="social-btn" href="#">📸</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function doSearch(){const q=document.getElementById('searchInput').value.trim();if(q)window.location.href='/search?q='+encodeURIComponent(q);}
+function doHeroSearch(){const q=document.getElementById('heroSearch').value.trim();if(q)window.location.href='/search?q='+encodeURIComponent(q);}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+document.getElementById('heroSearch').addEventListener('keydown',e=>{if(e.key==='Enter')doHeroSearch();});
+
+function trustClass(s){return s>=71?'high':s>=41?'medium':'low';}
+function trustText(s){return s>=71?'✅ Highly Trusted':s>=41?'⚠️ Moderate':'❌ Risky';}
+function starHTML(r){const f=Math.floor(parseFloat(r)||0);let s='';for(let i=0;i<5;i++)s+=`<span class="s">${i<f?'★':'☆'}</span>`;return s+` <span>(${parseFloat(r||0).toFixed(1)})</span>`;}
+
+function renderCard(p){
+  const score=p.trust_score?Math.round(p.trust_score*100):Math.floor(Math.random()*40+55);
+  const tc=trustClass(score);
+  const price=p.price||p.final_price||999;
+  const title=p.title||p.name||'Product';
+  const brand=p.brand||p.store||'H2P Store';
+  const rating=p.rating||p.stars||(Math.random()*1.5+3.5).toFixed(1);
+  const emojis=['📱','👗','⌚','🎧','👟','💻','📷','🕶️','🎮','🏋️'];
+  const emoji=emojis[Math.floor(Math.random()*emojis.length)];
+  const imgSrc=p.image_url||p.image||null;
+  const badge=Math.random()>0.6?`<div class="badge-sale">SALE</div>`:`<div class="badge-new">NEW</div>`;
+  const op=typeof price==='number'?Math.round(price*1.25):'';
+  const disc=op?Math.round((1-price/op)*100):'';
+  const pid=p.product_id||p.asin||'demo';
+  const qp='title='+encodeURIComponent(title)+'&price='+price+'&brand='+encodeURIComponent(brand)+'&rating='+rating+'&score='+score+'&img='+encodeURIComponent(p.image_url||'');
+  return `<div class="product-card" onclick="window.location='/product-page/${pid}?${qp}'">
+    <div class="product-img" style="position:relative;">${badge}<button class="wishlist-btn" onclick="event.stopPropagation()">🤍</button>${imgSrc?`<img src="${imgSrc}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>`:''}${!imgSrc?`<span style='font-size:3.5rem'>${emoji}</span>`:''}</div>
+    <div class="product-info">
+      <div class="product-brand">${brand}</div>
+      <div class="product-name">${title}</div>
+      <div class="trust-meter">
+        <div class="trust-label-row"><span class="trust-label ${tc}">${trustText(score)}</span><span class="trust-score-num">${score}/100</span></div>
+        <div class="trust-bar-bg"><div class="trust-bar-fill ${tc}" style="width:${score}%"></div></div>
+      </div>
+      <div class="stars">${starHTML(rating)}</div>
+      <div class="product-price-row">
+        <span class="price-now">₹${typeof price==='number'?price.toLocaleString('en-IN'):price}</span>
+        ${op?`<span class="price-old">₹${op.toLocaleString('en-IN')}</span>`:''}
+        ${disc?`<span class="price-off">${disc}% off</span>`:''}
+      </div>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('${title.substring(0,20)}')">🛒 Add to Cart</button>
+    </div>
+  </div>`;
+}
+
+const demoProducts=[
+  {title:'Wireless Noise-Cancelling Headphones',brand:'SoundMax',price:2499,rating:4.5,trust_score:.88,image_url:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80'},
+  {title:"Men's Running Shoes Ultra Flex",brand:'SwiftStep',price:1299,rating:4.2,trust_score:.72,image_url:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80'},
+  {title:'Smart Watch Pro Series 5',brand:'TimeTech',price:3999,rating:4.7,trust_score:.91,image_url:'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&q=80'},
+  {title:'Portable Bluetooth Speaker 360',brand:'BeatBox',price:899,rating:3.9,trust_score:.55,image_url:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80'},
+  {title:'4K Ultra HD Action Camera',brand:'CapturePro',price:5499,rating:4.4,trust_score:.83,image_url:'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&q=80'},
+  {title:"Women's Casual Printed Dress",brand:'StyleHub',price:699,rating:4.1,trust_score:.68,image_url:'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&q=80'},
+  {title:'Gaming Mechanical Keyboard RGB',brand:'KeyStrike',price:1899,rating:4.6,trust_score:.87,image_url:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80'},
+  {title:'Stainless Steel Water Bottle',brand:'HydroFit',price:349,rating:4.3,trust_score:.79,image_url:'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80'},
+  {title:'Organic Face Moisturizer SPF30',brand:'GlowLab',price:549,rating:3.7,trust_score:.44,image_url:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80'},
+  {title:'Laptop Backpack Anti-Theft 35L',brand:'SafePack',price:1199,rating:4.5,trust_score:.85,image_url:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80'},
+];
+
+async function loadProducts(){
+  const grid=document.getElementById('productGrid');
+  try{
+    const res = await fetch('/api/products?limit=10');
+    const data=await res.json();
+    grid.innerHTML=data&&data.length>0?data.map(renderCard).join(''):demoProducts.map(renderCard).join('');
+  }catch(e){
+    grid.innerHTML=demoProducts.map(renderCard).join('');
+  }
+}
+
+let cartCount=0;
+function addToCart(name){
+  cartCount++;
+  document.getElementById('cartCount').textContent=cartCount;
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:#0A0F1E;color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;font-family:DM Sans,sans-serif;border-left:4px solid #FFB700;box-shadow:0 8px 30px rgba(0,0,0,.3);';
+  t.textContent=`✅ "${name}..." added to cart!`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+loadProducts();
+</script>
+</body>
+</html>

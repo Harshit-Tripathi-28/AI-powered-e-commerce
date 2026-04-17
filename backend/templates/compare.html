@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CompareX™ – H2P Vision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--navy:#0A0F1E;--navy2:#0D1B2A;--navy3:#16213e;--red:#CC0000;--red2:#FF2020;--orange:#FFB700;--pink:#FF4EA0;--purple:#A855F7;--cyan:#00D4FF;--light:#F5F6FA;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--shadow:0 4px 24px rgba(0,0,0,.10);--shadow-h:0 12px 40px rgba(0,0,0,.18);--grad-logo:linear-gradient(135deg,#FFB700,#FF4EA0,#A855F7,#00D4FF);--grad-red:linear-gradient(135deg,#FF2020,#CC0000);}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--text);overflow-x:hidden;}
+    nav{background:var(--navy2);padding:0 32px;height:72px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:999;box-shadow:0 2px 24px rgba(0,0,0,.5);}
+    .logo-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;padding:4px 14px 4px 0;border-right:1px solid rgba(255,255,255,.1);margin-right:8px;}
+    .logo-wrap img{height:52px;width:52px;object-fit:contain;filter:drop-shadow(0 0 12px #FF4EA060);}
+    .logo-text .n{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+    .logo-text .t{font-size:.6rem;color:#ffffff45;letter-spacing:1.8px;font-style:italic;margin-top:2px;}
+    .search-bar{flex:1;max-width:580px;display:flex;height:42px;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .25s;}
+    .search-bar:focus-within{border-color:var(--orange);}
+    .search-bar select{background:#e8eaf0;border:none;padding:0 10px;font-size:.78rem;font-family:'DM Sans',sans-serif;color:#374151;outline:none;cursor:pointer;}
+    .search-bar input{flex:1;border:none;padding:0 14px;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;background:#fff;}
+    .search-bar button{background:var(--orange);border:none;width:48px;font-size:1.1rem;cursor:pointer;transition:background .2s;}
+    .search-bar button:hover{background:#e6a500;}
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:20px;}
+    .nav-ico{display:flex;flex-direction:column;align-items:center;color:#ffffffbb;text-decoration:none;font-size:.7rem;gap:2px;cursor:pointer;transition:color .2s;}
+    .nav-ico:hover,.nav-ico.active{color:var(--cyan);}
+    .nav-ico span{font-size:1.35rem;}
+    .nav-login{background:transparent;border:1.5px solid #ffffff40;color:#ffffffcc;padding:8px 16px;border-radius:7px;font-size:.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;}
+    .nav-login:hover{border-color:var(--orange);color:var(--orange);}
+    .nav-cart{position:relative;background:var(--orange);color:var(--navy);border:none;padding:9px 18px;border-radius:8px;font-weight:600;font-size:.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;}
+    .nav-cart:hover{background:#e6a500;transform:scale(1.03);}
+    .cart-count{position:absolute;top:-7px;right:-7px;background:var(--red2);color:white;font-size:.6rem;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+    .compare-hero{background:linear-gradient(135deg,var(--navy) 0%,#0f1f3d 55%,#1a0a2e 100%);padding:52px 60px;position:relative;overflow:hidden;}
+    .compare-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,#00D4FF15,transparent 65%);pointer-events:none;}
+    .hero-inner{max-width:700px;position:relative;z-index:1;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid #00D4FF40;background:#00D4FF10;color:var(--cyan);font-size:.72rem;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:1px;margin-bottom:18px;}
+    .hero-title{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:white;line-height:1.2;margin-bottom:12px;}
+    .hero-title span{background:var(--grad-logo);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-sub{color:#ffffffaa;font-size:.95rem;line-height:1.7;margin-bottom:28px;max-width:500px;}
+    .compare-search-wrap{display:flex;gap:12px;max-width:600px;}
+    .compare-search{flex:1;display:flex;height:52px;border-radius:12px;overflow:hidden;box-shadow:0 4px 30px rgba(0,212,255,.15);border:2px solid rgba(0,212,255,.2);transition:border .25s;}
+    .compare-search:focus-within{border-color:var(--cyan);}
+    .compare-search input{flex:1;border:none;padding:0 18px;font-size:.95rem;font-family:'DM Sans',sans-serif;outline:none;background:white;}
+    .btn-compare-search{background:linear-gradient(135deg,var(--cyan),#0099cc);border:none;padding:0 28px;font-size:.9rem;font-weight:700;font-family:'DM Sans',sans-serif;color:var(--navy);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap;}
+    .btn-compare-search:hover{filter:brightness(1.1);}
+    .platform-badges{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+    .plt-badge{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#ffffffbb;font-size:.72rem;padding:5px 12px;border-radius:20px;}
+    .compare-body{max-width:1300px;margin:36px auto;padding:0 40px;}
+    .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .results-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;}
+    .results-count{font-size:.82rem;color:var(--muted);}
+    .sort-select{padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;cursor:pointer;background:white;}
+    .best-pick-banner{background:linear-gradient(135deg,#065a14,#0a7a1e);border-radius:16px;padding:20px 28px;margin-bottom:24px;display:flex;align-items:center;gap:20px;box-shadow:0 4px 20px rgba(6,90,20,.3);}
+    .best-pick-icon{font-size:2.5rem;flex-shrink:0;}
+    .best-pick-info .label{font-size:.7rem;font-weight:700;color:#4ade80;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+    .best-pick-info .name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:white;}
+    .best-pick-info .sub{font-size:.8rem;color:#ffffff80;margin-top:3px;}
+    .best-pick-score{margin-left:auto;text-align:center;flex-shrink:0;}
+    .best-pick-score .sc{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#4ade80;}
+    .best-pick-score .sl{font-size:.7rem;color:#ffffff60;}
+    .compare-table-wrap{background:white;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:32px;}
+    .compare-table{width:100%;border-collapse:collapse;}
+    .compare-table th{background:var(--navy2);color:white;padding:14px 20px;font-size:.82rem;font-weight:600;text-align:left;letter-spacing:.3px;}
+    .compare-table td{padding:14px 20px;border-bottom:1px solid var(--border);font-size:.85rem;vertical-align:middle;}
+    .compare-table tr:last-child td{border-bottom:none;}
+    .compare-table tr:hover td{background:#f9fafb;}
+    .compare-table tr.best-row td{background:#f0fdf4;}
+    .platform-cell{display:flex;align-items:center;gap:10px;}
+    .plt-logo{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .plt-name{font-weight:600;color:var(--text);}
+    .plt-seller{font-size:.72rem;color:var(--muted);}
+    .price-cell .p-main{font-size:1.05rem;font-weight:700;color:var(--text);}
+    .price-cell .p-old{font-size:.75rem;color:var(--muted);text-decoration:line-through;}
+    .p-off{font-size:.7rem;font-weight:700;color:#16a34a;background:#dcfce7;padding:2px 6px;border-radius:4px;margin-left:4px;}
+    .rating-cell{display:flex;align-items:center;gap:6px;}
+    .rating-cell .stars{color:var(--orange);font-size:.85rem;}
+    .rating-cell .num{font-weight:600;font-size:.85rem;}
+    .rating-cell .cnt{font-size:.72rem;color:var(--muted);}
+    .trust-cell-wrap{display:flex;align-items:center;gap:10px;}
+    .mini-bar-bg{width:80px;height:6px;background:#e5e7eb;border-radius:10px;overflow:hidden;flex-shrink:0;}
+    .mini-bar-fill{height:100%;border-radius:10px;}
+    .mini-bar-fill.high{background:linear-gradient(90deg,#16a34a,#4ade80);}
+    .mini-bar-fill.medium{background:linear-gradient(90deg,#d97706,#fbbf24);}
+    .mini-bar-fill.low{background:linear-gradient(90deg,#dc2626,#f87171);}
+    .trust-num{font-size:.82rem;font-weight:700;}
+    .trust-num.high{color:#16a34a;}.trust-num.medium{color:#d97706;}.trust-num.low{color:#dc2626;}
+    .score-badge{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;border:2px solid;}
+    .score-badge.high{color:#16a34a;border-color:#16a34a;background:#f0fdf4;}
+    .score-badge.medium{color:#d97706;border-color:#d97706;background:#fffbeb;}
+    .score-badge.low{color:#dc2626;border-color:#dc2626;background:#fff1f2;}
+    .best-badge{background:linear-gradient(135deg,#16a34a,#4ade80);color:white;font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;}
+    .btn-visit{background:var(--navy2);color:white;border:none;padding:8px 16px;border-radius:7px;font-size:.78rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .btn-visit:hover{background:var(--red);transform:scale(1.03);}
+    .sentiment-section{background:white;border-radius:20px;padding:32px 36px;box-shadow:var(--shadow);margin-bottom:32px;}
+    .sentiment-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+    .sentiment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+    .sentiment-card{border-radius:14px;padding:20px;border:1px solid var(--border);transition:all .2s;}
+    .sentiment-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+    .sc-platform{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+    .sc-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.78rem;}
+    .sc-bar-label{width:65px;color:var(--muted);font-size:.72rem;}
+    .sc-bar-bg{flex:1;height:6px;background:#e5e7eb;border-radius:10px;overflow:hidden;}
+    .sc-bar-pos{height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);border-radius:10px;}
+    .sc-bar-neu{height:100%;background:linear-gradient(90deg,#d97706,#fbbf24);border-radius:10px;}
+    .sc-bar-neg{height:100%;background:linear-gradient(90deg,#dc2626,#f87171);border-radius:10px;}
+    .sc-pct{font-size:.72rem;font-weight:700;width:32px;text-align:right;}
+    .compare-loader{text-align:center;padding:80px 40px;}
+    .loader-ring{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .loader-text{color:var(--muted);font-size:.9rem;}
+    .empty-state{text-align:center;padding:80px 40px;}
+    .empty-emoji{font-size:4rem;margin-bottom:16px;}
+    .empty-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:8px;}
+    .empty-sub{color:var(--muted);font-size:.88rem;}
+    .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;border-left:4px solid var(--orange);box-shadow:0 8px 30px rgba(0,0,0,.3);display:none;}
+    footer{background:var(--navy);color:#ffffff80;padding:30px 60px 20px;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#ffffff35;}
+    @media(max-width:900px){.compare-hero{padding:36px 20px;}.compare-body{padding:0 16px;}.hero-title{font-size:1.8rem;}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo-wrap">
+    <img src="/static/logo.svg" alt="H2P Vision" onerror="this.style.display='none'"/>
+    <div class="logo-text"><div class="n">H2P Vision</div><div class="t">Trust before you buy</div></div>
+  </a>
+  <div class="search-bar">
+    <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Shoes</option></select>
+    <input type="text" id="searchInput" placeholder="Search products, brands and more..."/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="nav-right">
+    <a href="/tryon" class="nav-ico"><span>👗</span><div>Try On</div></a>
+    <a href="/compare" class="nav-ico active"><span>⚖️</span><div>Compare</div></a>
+    <a href="/login" class="nav-login">Sign In</a>
+    <button class="nav-cart" onclick="window.location='/cart'">🛒 Cart<div class="cart-count" id="cartCount">0</div></button>
+  </div>
+</nav>
+
+<div class="compare-hero">
+  <div class="hero-inner">
+    <div class="hero-badge">⚖️ COMPAREX™ — REVIEW INTELLIGENCE ENGINE</div>
+    <div class="hero-title">Compare Products.<br/><span>Trust the Reviews.</span></div>
+    <div class="hero-sub">Search any product and instantly compare review sentiment, trust scores, and prices across Amazon, Flipkart, Walmart, Shopee and more.</div>
+    <div class="compare-search-wrap">
+      <div class="compare-search">
+        <input type="text" id="compareInput" placeholder="e.g. Nike Running Shoes, Samsung TV..."/>
+      </div>
+      <button class="btn-compare-search" onclick="doCompare()">⚖️ Compare Now</button>
+    </div>
+    <div class="platform-badges">
+      <div class="plt-badge">🛒 Amazon</div>
+      <div class="plt-badge">🛍️ Flipkart</div>
+      <div class="plt-badge">🏪 Walmart</div>
+      <div class="plt-badge">🌏 Shopee</div>
+      <div class="plt-badge">👔 Lazada</div>
+      <div class="plt-badge">👗 Shein</div>
+    </div>
+  </div>
+</div>
+
+<div class="compare-body">
+  <div class="empty-state" id="emptyState">
+    <div class="empty-emoji">⚖️</div>
+    <div class="empty-title">Start Comparing</div>
+    <div class="empty-sub">Enter a product name above to compare reviews, trust scores and prices across platforms.</div>
+  </div>
+  <div class="compare-loader" id="compareLoader" style="display:none;">
+    <div class="loader-ring"></div>
+    <div class="loader-text">Analyzing reviews across platforms...</div>
+  </div>
+  <div id="compareResults" style="display:none;">
+    <div class="best-pick-banner" id="bestPickBanner">
+      <div class="best-pick-icon">🏆</div>
+      <div class="best-pick-info">
+        <div class="label">Best Choice</div>
+        <div class="name" id="bestPickName">–</div>
+        <div class="sub" id="bestPickSub">–</div>
+      </div>
+      <div class="best-pick-score">
+        <div class="sc" id="bestPickScore">–</div>
+        <div class="sl">Overall Score</div>
+      </div>
+    </div>
+    <div class="results-header">
+      <div>
+        <div class="results-title" id="resultsTitle">Comparison Results</div>
+        <div class="results-count" id="resultsCount">–</div>
+      </div>
+      <select class="sort-select" onchange="sortResults(this.value)">
+        <option value="score">Sort: Best Score</option>
+        <option value="price_low">Sort: Price Low</option>
+        <option value="price_high">Sort: Price High</option>
+        <option value="trust">Sort: Trust Score</option>
+        <option value="rating">Sort: Rating</option>
+      </select>
+    </div>
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Platform</th><th>Price</th><th>Rating</th>
+            <th>Trust Score</th><th>Review Sentiment</th>
+            <th>Overall Score</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="compareTableBody"></tbody>
+      </table>
+    </div>
+    <div class="sentiment-section">
+      <div class="sentiment-title">🔍 Review Sentiment Analysis <span style="font-size:.8rem;font-weight:400;color:var(--muted);font-family:'DM Sans',sans-serif;">by platform</span></div>
+      <div class="sentiment-grid" id="sentimentGrid"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <div>© 2025 H2P Vision. All rights reserved. | Built with ❤️ by Team H2P</div>
+    <div>⚖️ CompareX™ — Review Intelligence Engine</div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+function doSearch(){const q=document.getElementById('searchInput').value.trim();if(q)window.location.href='/search?q='+encodeURIComponent(q);}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+document.getElementById('compareInput').addEventListener('keydown',e=>{if(e.key==='Enter')doCompare();});
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+function trustClass(s){return s>=71?'high':s>=41?'medium':'low';}
+function starStr(r){const f=Math.floor(parseFloat(r)||0);return '★'.repeat(f)+'☆'.repeat(5-f);}
+
+const platforms={
+  Amazon:{emoji:'🛒',color:'#FF9900'},
+  Flipkart:{emoji:'🛍️',color:'#2874f0'},
+  Walmart:{emoji:'🏪',color:'#0071CE'},
+  Shopee:{emoji:'🌏',color:'#EE4D2D'},
+  Lazada:{emoji:'👔',color:'#F57226'},
+  Shein:{emoji:'👗',color:'#E91E63'},
+};
+
+let currentResults=[];
+
+async function doCompare(){
+  const q=document.getElementById('compareInput').value.trim();
+  if(!q){showToast('Please enter a product name');return;}
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('compareResults').style.display='none';
+  document.getElementById('compareLoader').style.display='block';
+  try{
+    const res = await fetch('/api/compare?q=' + encodeURIComponent(q));
+    const data=await res.json();
+    currentResults=data&&data.length?transformAPIData(data,q):getDemoData(q);
+  }catch(e){currentResults=getDemoData(q);}
+  document.getElementById('compareLoader').style.display='none';
+  renderResults(currentResults,q);
+}
+
+function calculateScore(price,rating,reviews){
+  return Math.round(((rating*3)+Math.log(reviews+1)-(price/2000))*10)/10;
+}
+
+function transformAPIData(data,q){
+  return data.map((p,i)=>{
+    const plt=Object.keys(platforms)[i%6];
+    const price=parseFloat(p.price||p.final_price)||999;
+    const rating=parseFloat(p.rating)||4.0;
+    const reviews=parseInt(p.reviews_count)||100;
+    const trust=p.trust_score?Math.round(p.trust_score*100):Math.floor(Math.random()*30+55);
+    const score=p.score||calculateScore(price,rating,reviews);
+    const pos=Math.floor(Math.random()*30+50);
+    const neg=Math.floor(Math.random()*15+5);
+    return {platform:p.platform||plt,title:p.title||q,price,rating,reviews,trust,score,best:i===0,url:p.url||p.domain||'#',sentiment:{positive:pos,neutral:100-pos-neg,negative:neg}};
+  });
+}
+
+function getDemoData(q){
+  const base=Math.floor(Math.random()*2000+800);
+  return Object.keys(platforms).map((plt,i)=>{
+    const price=base+Math.floor((Math.random()-.5)*base*.3);
+    const rating=Math.round((3.5+Math.random()*1.4)*10)/10;
+    const reviews=Math.floor(Math.random()*1000+50);
+    const trust=Math.floor(Math.random()*40+50);
+    const score=calculateScore(price,rating,reviews);
+    const pos=Math.floor(Math.random()*30+50);
+    const neg=Math.floor(Math.random()*15+5);
+    return {platform:plt,title:q+' on '+plt,price,rating,reviews,trust,score,best:i===0,url:'#',sentiment:{positive:pos,neutral:100-pos-neg,negative:neg}};
+  });
+}
+
+function renderResults(data,q){
+  data.sort((a,b)=>b.score-a.score);
+  data.forEach((d,i)=>d.best=i===0);
+  const best=data[0];
+  document.getElementById('bestPickName').textContent=best.platform+' — '+best.title.substring(0,45);
+  document.getElementById('bestPickSub').textContent='Rs.'+best.price.toLocaleString('en-IN')+' · '+best.rating+'★ · Trust '+best.trust+'/100';
+  document.getElementById('bestPickScore').textContent=best.score;
+  document.getElementById('resultsTitle').textContent='"'+q+'" — Comparison';
+  document.getElementById('resultsCount').textContent=data.length+' platforms compared';
+  renderTable(data);
+  renderSentiment(data);
+  document.getElementById('compareResults').style.display='block';
+}
+
+function renderTable(data){
+  document.getElementById('compareTableBody').innerHTML=data.map(p=>{
+    const tc=trustClass(p.trust);
+    const pc=platforms[p.platform]||{emoji:'🛒',color:'#666'};
+    const op=Math.round(p.price*1.2);
+    const disc=Math.round((1-p.price/op)*100);
+    const pos=p.sentiment.positive;
+    const sl=pos>=60?'Mostly Positive':pos>=40?'Mixed':'Mostly Negative';
+    const sc=pos>=60?'#16a34a':pos>=40?'#d97706':'#dc2626';
+    return `<tr class="${p.best?'best-row':''}">
+      <td><div class="platform-cell"><div class="plt-logo" style="background:${pc.color}20;color:${pc.color}">${pc.emoji}</div><div><div class="plt-name">${p.platform} ${p.best?'<span class="best-badge">BEST</span>':''}</div><div class="plt-seller">${p.title.substring(0,28)}...</div></div></div></td>
+      <td><div class="price-cell"><div class="p-main">&#8377;${p.price.toLocaleString('en-IN')}<span class="p-off">${disc}% off</span></div><div class="p-old">&#8377;${op.toLocaleString('en-IN')}</div></div></td>
+      <td><div class="rating-cell"><span class="stars">${starStr(p.rating)}</span><span class="num">${p.rating}</span><span class="cnt">(${p.reviews.toLocaleString()})</span></div></td>
+      <td><div class="trust-cell-wrap"><div class="mini-bar-bg"><div class="mini-bar-fill ${tc}" style="width:${p.trust}%"></div></div><span class="trust-num ${tc}">${p.trust}/100</span></div></td>
+      <td><span style="font-size:.82rem;font-weight:600;color:${sc}">${sl}</span><div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pos}% positive reviews</div></td>
+      <td><div class="score-badge ${tc}">${p.score}</div></td>
+      <td><button class="btn-visit" onclick="window.open('${p.url}','_blank')">View &#8594;</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderSentiment(data){
+  document.getElementById('sentimentGrid').innerHTML=data.map(p=>{
+    const pc=platforms[p.platform]||{emoji:'🛒'};
+    return `<div class="sentiment-card">
+      <div class="sc-platform">${pc.emoji} ${p.platform}</div>
+      <div class="sc-bar-row"><span class="sc-bar-label">Positive</span><div class="sc-bar-bg"><div class="sc-bar-pos" style="width:${p.sentiment.positive}%"></div></div><span class="sc-pct" style="color:#16a34a">${p.sentiment.positive}%</span></div>
+      <div class="sc-bar-row"><span class="sc-bar-label">Neutral</span><div class="sc-bar-bg"><div class="sc-bar-neu" style="width:${p.sentiment.neutral}%"></div></div><span class="sc-pct" style="color:#d97706">${p.sentiment.neutral}%</span></div>
+      <div class="sc-bar-row"><span class="sc-bar-label">Negative</span><div class="sc-bar-bg"><div class="sc-bar-neg" style="width:${p.sentiment.negative}%"></div></div><span class="sc-pct" style="color:#dc2626">${p.sentiment.negative}%</span></div>
+    </div>`;
+  }).join('');
+}
+
+function sortResults(by){
+  if(!currentResults.length)return;
+  const s=[...currentResults];
+  if(by==='price_low')s.sort((a,b)=>a.price-b.price);
+  else if(by==='price_high')s.sort((a,b)=>b.price-a.price);
+  else if(by==='trust')s.sort((a,b)=>b.trust-a.trust);
+  else if(by==='rating')s.sort((a,b)=>b.rating-a.rating);
+  else s.sort((a,b)=>b.score-a.score);
+  renderTable(s);renderSentiment(s);
+}
+
+window.addEventListener('load',()=>{
+  const q=new URLSearchParams(window.location.search).get('q');
+  if(q){document.getElementById('compareInput').value=decodeURIComponent(q);doCompare();}
+});
+</script>
+</body>
+</html>

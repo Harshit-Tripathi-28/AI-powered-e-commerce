@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product – H2P Vision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy:   #0A0F1E;
+      --navy2:  #0D1B2A;
+      --navy3:  #16213e;
+      --red:    #CC0000;
+      --red2:   #FF2020;
+      --orange: #FFB700;
+      --pink:   #FF4EA0;
+      --purple: #A855F7;
+      --cyan:   #00D4FF;
+      --light:  #F5F6FA;
+      --white:  #ffffff;
+      --text:   #1a1a2e;
+      --muted:  #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 4px 24px rgba(0,0,0,0.10);
+      --shadow-h: 0 12px 40px rgba(0,0,0,0.18);
+      --grad-logo: linear-gradient(135deg,#FFB700,#FF4EA0,#A855F7,#00D4FF);
+      --grad-red: linear-gradient(135deg,#FF2020,#CC0000);
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--text);overflow-x:hidden;}
+
+    /* NAVBAR */
+    nav{background:var(--navy2);padding:0 32px;height:72px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:999;box-shadow:0 2px 24px rgba(0,0,0,.5);}
+    .logo-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;padding:4px 14px 4px 0;border-right:1px solid rgba(255,255,255,0.1);margin-right:8px;}
+    .logo-wrap img{height:52px;width:52px;object-fit:contain;filter:drop-shadow(0 0 12px #FF4EA060);}
+    .logo-text .n{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+    .logo-text .t{font-size:.6rem;color:#ffffff45;letter-spacing:1.8px;font-style:italic;margin-top:2px;}
+    .search-bar{flex:1;max-width:580px;display:flex;height:42px;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .25s;}
+    .search-bar:focus-within{border-color:var(--orange);}
+    .search-bar select{background:#e8eaf0;border:none;padding:0 10px;font-size:.78rem;font-family:'DM Sans',sans-serif;color:#374151;outline:none;cursor:pointer;}
+    .search-bar input{flex:1;border:none;padding:0 14px;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;background:#fff;}
+    .search-bar button{background:var(--orange);border:none;width:48px;font-size:1.1rem;cursor:pointer;transition:background .2s;}
+    .search-bar button:hover{background:#e6a500;}
+    .nav-right{margin-left:auto;display:flex;align-items:center;gap:20px;}
+    .nav-ico{display:flex;flex-direction:column;align-items:center;color:#ffffffbb;text-decoration:none;font-size:.7rem;gap:2px;cursor:pointer;transition:color .2s;}
+    .nav-ico:hover{color:var(--orange);}
+    .nav-ico span{font-size:1.35rem;}
+    .nav-login{background:transparent;border:1.5px solid #ffffff40;color:#ffffffcc;padding:8px 16px;border-radius:7px;font-size:.82rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;}
+    .nav-login:hover{border-color:var(--orange);color:var(--orange);}
+    .nav-cart{position:relative;background:var(--orange);color:var(--navy);border:none;padding:9px 18px;border-radius:8px;font-weight:600;font-size:.85rem;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s;}
+    .nav-cart:hover{background:#e6a500;transform:scale(1.03);}
+    .cart-count{position:absolute;top:-7px;right:-7px;background:var(--red2);color:white;font-size:.6rem;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+    /* BREADCRUMB */
+    .breadcrumb{background:white;padding:12px 60px;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:8px;}
+    .breadcrumb a{color:var(--muted);text-decoration:none;transition:color .2s;}
+    .breadcrumb a:hover{color:var(--red);}
+    .breadcrumb span{color:var(--text);font-weight:500;}
+
+    /* MAIN LAYOUT */
+    .product-page{max-width:1300px;margin:32px auto;padding:0 40px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+
+    /* LEFT — IMAGE SECTION */
+    .img-section{}
+    .main-img-wrap{background:white;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;border:2px solid var(--border);}
+    .main-img-wrap img{width:100%;height:100%;object-fit:cover;}
+    .main-img-wrap .img-fallback{font-size:6rem;}
+    .img-badge{position:absolute;top:16px;left:16px;background:var(--red2);color:white;font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.5px;}
+    .img-wishlist{position:absolute;top:16px;right:16px;background:white;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.12);transition:transform .2s;}
+    .img-wishlist:hover{transform:scale(1.15);}
+
+    /* thumbnail row */
+    .thumb-row{display:flex;gap:10px;margin-top:14px;}
+    .thumb{width:72px;height:72px;border-radius:10px;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;transition:border-color .2s;overflow:hidden;}
+    .thumb:hover,.thumb.active{border-color:var(--orange);}
+    .thumb img{width:100%;height:100%;object-fit:cover;}
+
+    /* action buttons under image */
+    .img-actions{display:flex;gap:12px;margin-top:18px;}
+    .btn-tryon{flex:1;background:linear-gradient(135deg,var(--navy),#1a0a2e);color:white;border:none;padding:14px;border-radius:10px;font-size:.88rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+    .btn-tryon:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,15,30,.3);}
+    .btn-compare{flex:1;background:linear-gradient(135deg,#7c2d12,#c2410c);color:white;border:none;padding:14px;border-radius:10px;font-size:.88rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+    .btn-compare:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(194,65,12,.3);}
+
+    /* RIGHT — INFO SECTION */
+    .info-section{}
+    .product-brand-tag{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+    .product-title{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:14px;}
+
+    /* stars + reviews count */
+    .rating-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+    .stars .s{color:var(--orange);font-size:1rem;}
+    .rating-num{font-size:.9rem;font-weight:600;color:var(--text);}
+    .reviews-count{font-size:.82rem;color:var(--muted);text-decoration:underline;cursor:pointer;}
+
+    /* TRUST METER — HERO */
+    .trust-box{background:white;border-radius:16px;padding:20px 24px;margin-bottom:20px;box-shadow:var(--shadow);border:1px solid var(--border);}
+    .trust-box-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+    .trust-box-title{font-size:.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+    .trust-score-big{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;}
+    .trust-score-big.high{color:#16a34a;}
+    .trust-score-big.medium{color:#d97706;}
+    .trust-score-big.low{color:#dc2626;}
+    .trust-label-big{font-size:.78rem;font-weight:700;margin-top:2px;}
+    .trust-label-big.high{color:#16a34a;}
+    .trust-label-big.medium{color:#d97706;}
+    .trust-label-big.low{color:#dc2626;}
+    .trust-bar-bg{height:10px;background:#e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:14px;}
+    .trust-bar-fill{height:100%;border-radius:10px;transition:width 1.2s ease;}
+    .trust-bar-fill.high{background:linear-gradient(90deg,#16a34a,#4ade80);}
+    .trust-bar-fill.medium{background:linear-gradient(90deg,#d97706,#fbbf24);}
+    .trust-bar-fill.low{background:linear-gradient(90deg,#dc2626,#f87171);}
+    .trust-breakdown{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+    .trust-stat{text-align:center;padding:10px 8px;background:var(--light);border-radius:10px;}
+    .trust-stat .val{font-size:1.1rem;font-weight:700;color:var(--text);}
+    .trust-stat .lbl{font-size:.65rem;color:var(--muted);margin-top:2px;letter-spacing:.3px;}
+
+    /* PRICE */
+    .price-box{margin-bottom:20px;}
+    .price-row{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+    .price-main{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--text);}
+    .price-old{font-size:1rem;color:var(--muted);text-decoration:line-through;}
+    .price-save{background:#dcfce7;color:#16a34a;font-size:.78rem;font-weight:700;padding:4px 10px;border-radius:6px;}
+    .delivery-info{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px;}
+    .delivery-info b{color:var(--text);}
+
+    /* ADD TO CART */
+    .cart-section{display:flex;gap:12px;margin-bottom:24px;}
+    .qty-selector{display:flex;align-items:center;border:2px solid var(--border);border-radius:8px;overflow:hidden;}
+    .qty-btn{background:var(--light);border:none;width:38px;height:48px;font-size:1.1rem;cursor:pointer;transition:background .2s;}
+    .qty-btn:hover{background:#e5e7eb;}
+    .qty-num{width:44px;text-align:center;font-size:.95rem;font-weight:600;border:none;outline:none;background:white;}
+    .btn-cart-main{flex:1;background:var(--navy2);color:white;border:none;padding:14px 24px;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+    .btn-cart-main:hover{background:var(--red);transform:translateY(-2px);}
+    .btn-buy-now{background:var(--orange);color:var(--navy);border:none;padding:14px 24px;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;}
+    .btn-buy-now:hover{background:#e6a500;transform:translateY(-2px);}
+
+    /* PRODUCT META */
+    .meta-list{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:20px;}
+    .meta-item{display:flex;gap:12px;font-size:.83rem;}
+    .meta-key{color:var(--muted);min-width:120px;font-weight:500;}
+    .meta-val{color:var(--text);font-weight:400;}
+
+    /* REVIEWS SECTION */
+    .reviews-section{grid-column:1/-1;background:white;border-radius:20px;padding:36px 40px;box-shadow:var(--shadow);margin-bottom:32px;}
+    .reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+    .reviews-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;}
+
+    /* review summary */
+    .review-summary{display:grid;grid-template-columns:200px 1fr;gap:32px;margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--border);}
+    .avg-score-box{text-align:center;padding:24px;background:var(--light);border-radius:16px;}
+    .avg-num{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--text);}
+    .avg-stars{font-size:1.4rem;color:var(--orange);margin:6px 0;}
+    .avg-label{font-size:.75rem;color:var(--muted);}
+    .rating-bars{display:flex;flex-direction:column;gap:8px;justify-content:center;}
+    .rating-bar-row{display:flex;align-items:center;gap:10px;font-size:.8rem;}
+    .rbar-label{width:35px;color:var(--muted);text-align:right;flex-shrink:0;}
+    .rbar-bg{flex:1;height:8px;background:#e5e7eb;border-radius:10px;overflow:hidden;}
+    .rbar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--orange),#e6a500);}
+    .rbar-count{width:28px;color:var(--muted);font-size:.75rem;flex-shrink:0;}
+
+    /* fake vs genuine */
+    .trust-analysis{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+    .ta-card{border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:14px;}
+    .ta-card.genuine{background:#f0fdf4;border:1px solid #bbf7d0;}
+    .ta-card.fake{background:#fff1f2;border:1px solid #fecdd3;}
+    .ta-icon{font-size:1.8rem;flex-shrink:0;}
+    .ta-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;}
+    .ta-card.genuine .ta-num{color:#16a34a;}
+    .ta-card.fake .ta-num{color:#dc2626;}
+    .ta-label{font-size:.75rem;color:var(--muted);margin-top:2px;}
+
+    /* review cards */
+    .review-list{display:flex;flex-direction:column;gap:16px;}
+    .review-card{padding:20px;border-radius:12px;background:var(--light);border:1px solid var(--border);position:relative;}
+    .review-card.genuine-review{border-left:4px solid #16a34a;}
+    .review-card.fake-review{border-left:4px solid #dc2626;opacity:.85;}
+    .review-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+    .reviewer-name{font-size:.85rem;font-weight:600;color:var(--text);}
+    .review-date{font-size:.75rem;color:var(--muted);}
+    .review-stars{color:var(--orange);font-size:.85rem;}
+    .review-badge{font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:4px;position:absolute;top:16px;right:16px;}
+    .review-badge.gen{background:#dcfce7;color:#16a34a;}
+    .review-badge.fake{background:#fee2e2;color:#dc2626;}
+    .review-text{font-size:.85rem;color:var(--text);line-height:1.65;}
+
+    /* SIMILAR PRODUCTS */
+    .similar-section{grid-column:1/-1;margin-bottom:32px;}
+    .similar-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:20px;}
+    .sim-card{background:white;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;transition:all .22s;}
+    .sim-card:hover{border-color:var(--orange);transform:translateY(-3px);}
+    .sim-img{aspect-ratio:1;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;overflow:hidden;}
+    .sim-img img{width:100%;height:100%;object-fit:cover;}
+    .sim-info{padding:10px 12px;}
+    .sim-name{font-size:.78rem;font-weight:500;color:var(--text);margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+    .sim-price{font-size:.88rem;font-weight:700;color:var(--text);}
+    .sim-trust{font-size:.65rem;font-weight:600;margin-top:3px;}
+    .sim-trust.high{color:#16a34a;}
+    .sim-trust.medium{color:#d97706;}
+
+    /* FOOTER */
+    footer{background:var(--navy);color:#ffffff80;padding:40px 60px 20px;}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:#ffffff35;padding-top:16px;border-top:1px solid #ffffff15;}
+
+    /* LOADING */
+    .page-loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;color:var(--muted);}
+    .loader-ring{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--navy);color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;border-left:4px solid var(--orange);box-shadow:0 8px 30px rgba(0,0,0,.3);animation:toastIn .3s ease;display:none;}
+    @keyframes toastIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    @media(max-width:900px){.product-page{grid-template-columns:1fr;}.review-summary{grid-template-columns:1fr;}.trust-analysis{grid-template-columns:1fr;}.similar-grid{grid-template-columns:repeat(3,1fr);}.breadcrumb,.product-page{padding-left:20px;padding-right:20px;}}
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="/" class="logo-wrap">
+    <img src="/static/logo.svg" alt="H2P Vision" onerror="this.style.display='none'"/>
+    <div class="logo-text">
+      <div class="n">H2P Vision</div>
+      <div class="t">Trust before you buy</div>
+    </div>
+  </a>
+  <div class="search-bar">
+    <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Shoes</option><option>Beauty</option></select>
+    <input type="text" id="searchInput" placeholder="Search products, brands and more..."/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="nav-right">
+    <a href="/tryon" class="nav-ico"><span>👗</span><div>Try On</div></a>
+    <a href="/compare" class="nav-ico"><span>⚖️</span><div>Compare</div></a>
+    <a href="/login" class="nav-login">Sign In</a>
+    <button class="nav-cart" onclick="window.location='/cart'">🛒 Cart<div class="cart-count" id="cartCount">0</div></button>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="/">🏠 Home</a> › <a href="#">Products</a> › <span id="bcTitle">Loading...</span>
+</div>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-ring"></div>
+  <div>Loading product details...</div>
+</div>
+
+<!-- PRODUCT PAGE -->
+<div class="product-page" id="productPage" style="display:none;">
+
+  <!-- LEFT: IMAGE -->
+  <div class="img-section">
+    <div class="main-img-wrap" id="mainImgWrap">
+      <div class="img-badge" id="imgBadge">SALE</div>
+      <button class="img-wishlist" id="wishlistBtn">🤍</button>
+      <img id="mainImg" src="" alt="Product" style="display:none;" onerror="this.style.display='none';document.getElementById('imgEmoji').style.display='flex';"/>
+      <div class="img-fallback" id="imgEmoji" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">📦</div>
+    </div>
+    <div class="thumb-row" id="thumbRow"></div>
+    <div class="img-actions">
+      <button class="btn-tryon" onclick="window.location='/tryon'">🪞 Virtual Try-On</button>
+      <button class="btn-compare" onclick="goCompare()">⚖️ Compare Prices</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: INFO -->
+  <div class="info-section">
+    <div class="product-brand-tag" id="productBrand">–</div>
+    <div class="product-title" id="productTitle">Loading...</div>
+
+    <div class="rating-row">
+      <div class="stars" id="starsEl">–</div>
+      <div class="rating-num" id="ratingNum">–</div>
+      <div class="reviews-count" onclick="document.getElementById('reviewsSection').scrollIntoView({behavior:'smooth'})" id="reviewsCountEl">– reviews</div>
+    </div>
+
+    <!-- TRUST METER -->
+    <div class="trust-box">
+      <div class="trust-box-header">
+        <div class="trust-box-title">🛡️ TrustMeter™</div>
+        <div>
+          <div class="trust-score-big" id="trustScoreBig">–</div>
+          <div class="trust-label-big" id="trustLabelBig">–</div>
+        </div>
+      </div>
+      <div class="trust-bar-bg">
+        <div class="trust-bar-fill" id="trustBarFill" style="width:0%"></div>
+      </div>
+      <div class="trust-breakdown">
+        <div class="trust-stat"><div class="val" id="tSentiment">–</div><div class="lbl">Sentiment</div></div>
+        <div class="trust-stat"><div class="val" id="tRating">–</div><div class="lbl">Avg Rating</div></div>
+        <div class="trust-stat"><div class="val" id="tReviews">–</div><div class="lbl">Reviews</div></div>
+      </div>
+    </div>
+
+    <!-- PRICE -->
+    <div class="price-box">
+      <div class="price-row">
+        <div class="price-main" id="priceMain">–</div>
+        <div class="price-old" id="priceOld"></div>
+        <div class="price-save" id="priceSave"></div>
+      </div>
+      <div class="delivery-info">🚚 <b>Free delivery</b> on orders above ₹499</div>
+    </div>
+
+    <!-- CART -->
+    <div class="cart-section">
+      <div class="qty-selector">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <input class="qty-num" id="qtyNum" value="1" readonly/>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="btn-cart-main" onclick="addToCart()">🛒 Add to Cart</button>
+      <button class="btn-buy-now" onclick="buyNow()">Buy Now</button>
+    </div>
+
+    <!-- META -->
+    <div class="meta-list" id="metaList"></div>
+
+  </div>
+
+  <!-- REVIEWS SECTION -->
+  <div class="reviews-section" id="reviewsSection">
+    <div class="reviews-header">
+      <div class="reviews-title">Customer Reviews <span style="font-size:.9rem;color:var(--muted);font-family:'DM Sans',sans-serif;" id="reviewsSubtitle"></span></div>
+      <div style="display:flex;gap:10px;">
+        <select id="reviewFilter" onchange="filterReviews()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;cursor:pointer;">
+          <option value="all">All Reviews</option>
+          <option value="genuine">✅ Genuine Only</option>
+          <option value="fake">❌ Suspicious Only</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Avg + bar chart -->
+    <div class="review-summary">
+      <div class="avg-score-box">
+        <div class="avg-num" id="avgNum">–</div>
+        <div class="avg-stars" id="avgStars">–</div>
+        <div class="avg-label" id="avgLabel">out of 5</div>
+      </div>
+      <div class="rating-bars" id="ratingBars"></div>
+    </div>
+
+    <!-- Fake vs Genuine -->
+    <div class="trust-analysis">
+      <div class="ta-card genuine">
+        <div class="ta-icon">✅</div>
+        <div>
+          <div class="ta-num" id="genuineCount">–</div>
+          <div class="ta-label">Genuine Reviews</div>
+        </div>
+      </div>
+      <div class="ta-card fake">
+        <div class="ta-icon">❌</div>
+        <div>
+          <div class="ta-num" id="fakeCount">–</div>
+          <div class="ta-label">Suspicious Reviews</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Cards -->
+    <div class="review-list" id="reviewList">
+      <div style="text-align:center;color:var(--muted);padding:20px;">Loading reviews...</div>
+    </div>
+  </div>
+
+  <!-- SIMILAR PRODUCTS -->
+  <div class="similar-section">
+    <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:4px;">Similar Products <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#FFB700,#FF4EA0,#A855F7,#00D4FF);margin-left:4px;vertical-align:middle;"></span></div>
+    <div style="font-size:.82rem;color:var(--muted);margin-bottom:16px;">More products you might like</div>
+    <div class="similar-grid" id="similarGrid">
+      <div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:20px;">Loading similar products...</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-bottom">
+    <div>© 2025 H2P Vision. All rights reserved. | Built with ❤️ by Team H2P</div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Helpers ──
+function trustClass(s){return s>=71?'high':s>=41?'medium':'low';}
+function trustText(s){return s>=71?'✅ Highly Trusted':s>=41?'⚠️ Moderate':'❌ Risky';}
+function starHTML(r,size='1rem'){
+  const f=Math.floor(parseFloat(r)||0);
+  let s='';
+  for(let i=0;i<5;i++) s+=`<span class="s" style="font-size:${size};color:${i<f?'#FFB700':'#d1d5db'}">${i<f?'★':'☆'}</span>`;
+  return s;
+}
+function doSearch(){const q=document.getElementById('searchInput').value.trim();if(q)window.location.href='/search?q='+encodeURIComponent(q);}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',3000);
+}
+
+// ── Quantity ──
+function changeQty(d){
+  const el=document.getElementById('qtyNum');
+  const v=parseInt(el.value)+d;
+  if(v>=1&&v<=99) el.value=v;
+}
+
+// ── Cart ──
+function addToCart(){
+  const title=document.getElementById('productTitle').textContent;
+  const qty=document.getElementById('qtyNum').value;
+  const cartCount=document.getElementById('cartCount');
+  cartCount.textContent=parseInt(cartCount.textContent||0)+parseInt(qty);
+  showToast(`✅ ${qty}x "${title.substring(0,25)}..." added to cart!`);
+}
+function buyNow(){
+  addToCart();
+  showToast('🚀 Redirecting to checkout...');
+  setTimeout(()=>window.location.href='/cart',1200);
+}
+
+// ── Compare ──
+function goCompare(){
+  const title=document.getElementById('productTitle').textContent;
+  window.location.href='/compare?q='+encodeURIComponent(title.substring(0,30));
+}
+
+// ── Get product ID from URL ──
+function getProductId(){
+  const parts=window.location.pathname.split('/');
+  return parts[parts.length-1];
+}
+
+// ── Generate demo reviews ──
+const reviewTexts=[
+  {text:"Absolutely love this product! Works perfectly and exceeded my expectations. The build quality is excellent and shipping was fast.",genuine:true,rating:5,name:"Rahul S."},
+  {text:"Good product overall. Does what it says. Minor issue with packaging but the product itself is solid.",genuine:true,rating:4,name:"Priya M."},
+  {text:"AMAZING DEAL!! Buy now limited offer click here best price guaranteed!!!",genuine:false,rating:5,name:"user_xyz99"},
+  {text:"I've been using this for 3 months now and it's held up really well. Comfortable and durable. Would recommend.",genuine:true,rating:4,name:"Amit K."},
+  {text:"Perfect gift! My friend loved it. Great value for money.",genuine:true,rating:5,name:"Sneha T."},
+  {text:"Best product ever!!!! 5 stars definitely buy this you won't regret!!!",genuine:false,rating:5,name:"anonuser123"},
+  {text:"Decent quality for the price. Nothing extraordinary but gets the job done. Delivery was on time.",genuine:true,rating:3,name:"Vikram P."},
+  {text:"Very impressed with the quality. Exactly as described in the listing.",genuine:true,rating:5,name:"Ananya R."},
+];
+
+// ── Render reviews ──
+let allReviews=[];
+function renderReviews(filter='all'){
+  const list=document.getElementById('reviewList');
+  let filtered=allReviews;
+  if(filter==='genuine') filtered=allReviews.filter(r=>r.genuine);
+  if(filter==='fake') filtered=allReviews.filter(r=>!r.genuine);
+
+  if(!filtered.length){
+    list.innerHTML='<div style="text-align:center;color:var(--muted);padding:20px;">No reviews found.</div>';
+    return;
+  }
+
+  list.innerHTML=filtered.map(r=>`
+    <div class="review-card ${r.genuine?'genuine-review':'fake-review'}">
+      <span class="review-badge ${r.genuine?'gen':'fake'}">${r.genuine?'✅ Genuine':'❌ Suspicious'}</span>
+      <div class="review-top">
+        <div>
+          <div class="reviewer-name">${r.name}</div>
+          <div class="review-stars">${starHTML(r.rating,'0.85rem')}</div>
+        </div>
+        <div class="review-date">${r.date||'Verified Purchase'}</div>
+      </div>
+      <div class="review-text">${r.text}</div>
+    </div>
+  `).join('');
+}
+
+function filterReviews(){
+  renderReviews(document.getElementById('reviewFilter').value);
+}
+
+// ── Rating bars ──
+function renderRatingBars(reviews){
+  const counts={5:0,4:0,3:0,2:0,1:0};
+  reviews.forEach(r=>{ if(counts[r.rating]!==undefined) counts[r.rating]++; });
+  const total=reviews.length||1;
+  const el=document.getElementById('ratingBars');
+  el.innerHTML=[5,4,3,2,1].map(n=>`
+    <div class="rating-bar-row">
+      <div class="rbar-label">${n}★</div>
+      <div class="rbar-bg"><div class="rbar-fill" style="width:${Math.round(counts[n]/total*100)}%"></div></div>
+      <div class="rbar-count">${counts[n]}</div>
+    </div>
+  `).join('');
+}
+
+// ── Load product ──
+async function loadProduct(){
+  const id=getProductId();
+  const loader=document.getElementById('pageLoader');
+  const page=document.getElementById('productPage');
+
+  try{
+    // Try real API first
+    let product=null;
+    try{
+      const res=await fetch(`/products/${id}`);
+      if(res.ok) product=await res.json();
+    }catch(e){}
+
+    // Fallback: read from URL params passed by index.html
+    if(!product||product.error){
+      const up=new URLSearchParams(window.location.search);
+      product={
+        title: up.get('title') ? decodeURIComponent(up.get('title')) : 'Product',
+        brand: up.get('brand') ? decodeURIComponent(up.get('brand')) : 'H2P Store',
+        price: parseFloat(up.get('price'))||999,
+        rating: parseFloat(up.get('rating'))||4.0,
+        reviews_count: 100,
+        trust_score: parseFloat(up.get('score'))/100||0.75,
+        image_url: up.get('img') ? decodeURIComponent(up.get('img')) : '',
+        availability: 'In Stock',
+        asin: id,
+        reviews:[],
+      };
+    }
+
+    loader.style.display='none';
+    page.style.display='grid';
+
+    const score=product.trust_score?Math.round(product.trust_score*100):Math.floor(Math.random()*30+60);
+    const tc=trustClass(score);
+    const price=typeof product.price==='number'?product.price:parseFloat(product.final_price)||999;
+    const oldPrice=Math.round(price*1.25);
+    const disc=Math.round((1-price/oldPrice)*100);
+    const rating=parseFloat(product.rating)||4.0;
+    const reviewCount=parseInt(product.reviews_count)||reviewTexts.length;
+
+    // Breadcrumb
+    document.title=`${product.title} – H2P Vision`;
+    document.getElementById('bcTitle').textContent=product.title.substring(0,40)+'...';
+
+    // Image
+    if(product.image_url){
+      const img=document.getElementById('mainImg');
+      img.src=product.image_url;
+      img.style.display='block';
+      document.getElementById('imgEmoji').style.display='none';
+    }
+
+    // Thumbs (show same image 3 times as demo)
+    const imgs = product.images_list || [product.image_url].filter(Boolean);
+    thumbRow.innerHTML = imgs.map((url, idx) => `
+    <div class="thumb ${idx===0?'active':''}" onclick="switchImg('${url}')">
+    <img src="${url}" onerror="this.style.display='none'"/>
+    </div>
+    `).join('');
+    function switchImg(url){
+      document.getElementById('mainImg').src = url;
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+    }
+    // Info
+    document.getElementById('productBrand').textContent=product.brand||'H2P Store';
+    document.getElementById('productTitle').textContent=product.title;
+    document.getElementById('starsEl').innerHTML=starHTML(rating,'1rem');
+    document.getElementById('ratingNum').textContent=rating.toFixed(1);
+    document.getElementById('reviewsCountEl').textContent=`${reviewCount.toLocaleString()} reviews`;
+
+    // Trust
+    const tsEl=document.getElementById('trustScoreBig');
+    tsEl.textContent=score+'/100';
+    tsEl.className='trust-score-big '+tc;
+    const tlEl=document.getElementById('trustLabelBig');
+    tlEl.textContent=trustText(score);
+    tlEl.className='trust-label-big '+tc;
+    const bar=document.getElementById('trustBarFill');
+    bar.className='trust-bar-fill '+tc;
+    setTimeout(()=>bar.style.width=score+'%',100);
+
+    // Trust breakdown
+    const sentiment=Math.round((score/100)*2-1>0?(score/100)*100:score*0.8);
+    document.getElementById('tSentiment').textContent=(score>=71?'Positive':score>=41?'Neutral':'Negative');
+    document.getElementById('tRating').textContent=rating.toFixed(1)+'★';
+    document.getElementById('tReviews').textContent=reviewCount>999?Math.round(reviewCount/1000)+'K':reviewCount;
+
+    // Price
+    document.getElementById('priceMain').textContent='₹'+price.toLocaleString('en-IN');
+    document.getElementById('priceOld').textContent='₹'+oldPrice.toLocaleString('en-IN');
+    document.getElementById('priceSave').textContent=disc+'% off';
+
+    // Meta
+    const metaItems=[
+      {k:'Availability',v:product.availability||'In Stock'},
+      {k:'Brand',v:product.brand||'–'},
+      {k:'Category',v:product.department||product.categories?.[0]||'General'},
+      {k:'Platform',v:product.domain?'Amazon':'H2P Store'},
+      {k:'ASIN / ID',v:product.asin||id},
+    ];
+    document.getElementById('metaList').innerHTML=metaItems.map(m=>`
+      <div class="meta-item"><span class="meta-key">${m.k}</span><span class="meta-val">${m.v}</span></div>
+    `).join('');
+
+    // Reviews — use product.reviews or demo
+    allReviews=product.reviews&&product.reviews.length>0
+      ? product.reviews.map(r=>({
+          text:r.body||r.review_text||r.text||'No review text',
+          genuine: (r.sentiment||0)>=0,
+          rating: parseFloat(r.stars||r.rating||3),
+          name: r.reviewer||r.author||'Verified Buyer',
+          date: r.date||'Verified Purchase'
+        }))
+      : reviewTexts;
+
+    // Avg rating
+    const avgR=(allReviews.reduce((a,r)=>a+r.rating,0)/allReviews.length).toFixed(1);
+    document.getElementById('avgNum').textContent=avgR;
+    document.getElementById('avgStars').innerHTML=starHTML(avgR,'1.4rem');
+    document.getElementById('avgLabel').textContent=`Based on ${allReviews.length} reviews`;
+    document.getElementById('reviewsSubtitle').textContent=`(${allReviews.length} reviews)`;
+
+    // Genuine vs Fake
+    const genuineR=allReviews.filter(r=>r.genuine).length;
+    const fakeR=allReviews.length-genuineR;
+    document.getElementById('genuineCount').textContent=genuineR;
+    document.getElementById('fakeCount').textContent=fakeR;
+
+    renderRatingBars(allReviews);
+    renderReviews('all');
+
+    // Similar products
+    loadSimilar(product.brand||'',product.title||'');
+
+  }catch(err){
+    loader.innerHTML='<div style="color:var(--red);font-size:1rem;">Failed to load product. <a href="/" style="color:var(--orange)">Go home</a></div>';
+  }
+}
+
+function selectThumb(el,imgUrl,emoji){
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Load similar products ──
+async function loadSimilar(brand,title){
+  const grid=document.getElementById('similarGrid');
+  try{
+    const q=encodeURIComponent(brand||title.split(' ')[0]);
+    const res=await fetch(`/recommend?q=${q}`);
+    const data=await res.json();
+    if(data&&data.length>0){
+      grid.innerHTML=data.slice(0,5).map(p=>{
+        const sc=p.trust_score?Math.round(p.trust_score*100):Math.floor(Math.random()*30+60);
+        const tc=trustClass(sc);
+        const price=p.price||p.final_price||999;
+        const emojis=['📱','👗','⌚','🎧','👟','💻','📷','🕶️'];
+        const emoji=emojis[Math.floor(Math.random()*emojis.length)];
+        return `<div class="sim-card" onclick="window.location='/products/${p.product_id||p.asin||''}'">
+          <div class="sim-img">${p.image_url?`<img src="${p.image_url}" onerror="this.style.display='none'"/>`:''}${!p.image_url?emoji:''}</div>
+          <div class="sim-info">
+            <div class="sim-name">${p.title||p.name||'Product'}</div>
+            <div class="sim-price">₹${typeof price==='number'?price.toLocaleString('en-IN'):price}</div>
+            <div class="sim-trust ${tc}">${trustText(sc)} (${sc}/100)</div>
+          </div>
+        </div>`;
+      }).join('');
+    } else { grid.innerHTML=getDemoSimilar(); }
+  }catch(e){ grid.innerHTML=getDemoSimilar(); }
+}
+
+function getDemoSimilar(){
+  const items=[
+    {n:'Running Shoes Pro',p:1499,e:'👟',s:82},
+    {n:'Sports Sneakers',p:999,e:'👟',s:71},
+    {n:'Athletic Footwear',p:1799,e:'👟',s:88},
+    {n:'Trail Running Shoes',p:2199,e:'👟',s:65},
+    {n:'Casual Sneakers',p:799,e:'👟',s:74},
+  ];
+  return items.map(i=>`<div class="sim-card">
+    <div class="sim-img">${i.e}</div>
+    <div class="sim-info">
+      <div class="sim-name">${i.n}</div>
+      <div class="sim-price">₹${i.p.toLocaleString('en-IN')}</div>
+      <div class="sim-trust ${trustClass(i.s)}">${trustText(i.s)} (${i.s}/100)</div>
+    </div>
+  </div>`).join('');
+}
+
+// Wishlist toggle
+document.getElementById('wishlistBtn').addEventListener('click',function(){
+  this.textContent=this.textContent==='🤍'?'❤️':'🤍';
+  showToast(this.textContent==='❤️'?'❤️ Added to wishlist!':'Removed from wishlist');
+});
+
+loadProduct();
+</script>
+</body>
+</html>
