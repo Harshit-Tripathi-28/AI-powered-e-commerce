@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register – H2P Vision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--navy:#0A0F1E;--navy2:#0D1B2A;--red:#CC0000;--red2:#FF2020;--orange:#FFB700;--pink:#FF4EA0;--purple:#A855F7;--cyan:#00D4FF;--light:#F5F6FA;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--grad-red:linear-gradient(135deg,#FF2020,#CC0000);}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:20px 0;}
+    body::before{content:'';position:absolute;top:-100px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,#00D4FF15,transparent 65%);pointer-events:none;}
+    body::after{content:'';position:absolute;bottom:-80px;right:-80px;width:400px;height:400px;background:radial-gradient(circle,#FF4EA015,transparent 65%);pointer-events:none;}
+
+    .auth-card{background:white;border-radius:24px;width:100%;max-width:460px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative;z-index:2;animation:slideUp .5s ease;}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+    .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+    .auth-logo img{height:44px;width:44px;object-fit:contain;}
+    .auth-logo .n{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .auth-logo .t{font-size:.6rem;color:var(--muted);letter-spacing:1.5px;font-style:italic;}
+
+    .auth-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+    .auth-sub{font-size:.85rem;color:var(--muted);margin-bottom:24px;}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .form-group{margin-bottom:16px;}
+    .form-label{display:block;font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:6px;}
+    .form-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:11px 14px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s,box-shadow .2s;color:var(--text);}
+    .form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,183,0,.15);}
+    .form-input.error{border-color:var(--red2);}
+    .error-msg{font-size:.73rem;color:var(--red2);margin-top:4px;display:none;}
+
+    .pass-wrap{position:relative;}
+    .pass-wrap .form-input{padding-right:44px;}
+    .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);}
+
+    /* Password strength */
+    .strength-bar{height:4px;background:var(--border);border-radius:10px;margin-top:6px;overflow:hidden;}
+    .strength-fill{height:100%;border-radius:10px;transition:width .3s,background .3s;}
+    .strength-text{font-size:.7rem;color:var(--muted);margin-top:3px;}
+
+    .terms{display:flex;align-items:flex-start;gap:8px;font-size:.78rem;color:var(--muted);margin-bottom:16px;}
+    .terms input{margin-top:2px;accent-color:var(--orange);}
+    .terms a{color:var(--orange);}
+
+    .submit-btn{width:100%;background:linear-gradient(135deg,var(--red),var(--red2));color:white;border:none;padding:13px;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:4px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .submit-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+    .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+    .error-box{font-size:.82rem;background:#fff1f2;padding:10px 12px;border-radius:8px;border-left:3px solid var(--red2);margin-bottom:12px;display:none;color:var(--red2);}
+
+    .divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted);font-size:.78rem;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+    .switch-link{text-align:center;font-size:.85rem;color:var(--muted);}
+    .switch-link a{color:var(--red);font-weight:600;text-decoration:none;}
+    .switch-link a:hover{text-decoration:underline;}
+
+    .mini-badges{display:flex;justify-content:center;gap:16px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
+    .mini-badge{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);}
+
+    .success-state{text-align:center;display:none;}
+    .success-emoji{font-size:3.5rem;margin-bottom:12px;}
+    .success-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:8px;}
+    .success-sub{font-size:.85rem;color:var(--muted);}
+
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+<div class="auth-card">
+
+  <div class="auth-logo">
+    <img src="/static/logo.svg" alt="H2P Vision" onerror="this.style.display='none'"/>
+    <div><div class="n">H2P Vision</div><div class="t">Trust before you buy</div></div>
+  </div>
+
+  <div id="registerForm">
+    <div class="auth-title">Create Account ✨</div>
+    <div class="auth-sub">Join H2P Vision and shop smarter today</div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input class="form-input" type="text" id="firstName" placeholder="Harshit"/>
+        <div class="error-msg" id="fnErr">Required</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input class="form-input" type="text" id="lastName" placeholder="Sharma"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="regEmail" placeholder="you@example.com"/>
+      <div class="error-msg" id="regEmailErr">Enter a valid email</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="pass-wrap">
+        <input class="form-input" type="password" id="regPass" placeholder="Min. 8 characters" oninput="checkStrength(this.value)"/>
+        <button class="eye-btn" onclick="togglePass('regPass', this)">👁</button>
+      </div>
+      <div class="strength-bar"><div class="strength-fill" id="strengthFill" style="width:0%"></div></div>
+      <div class="strength-text" id="strengthText"></div>
+      <div class="error-msg" id="regPassErr">Min 8 characters required</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Confirm Password</label>
+      <div class="pass-wrap">
+        <input class="form-input" type="password" id="confirmPass" placeholder="Repeat password"/>
+        <button class="eye-btn" onclick="togglePass('confirmPass', this)">👁</button>
+      </div>
+      <div class="error-msg" id="confirmErr">Passwords don't match</div>
+    </div>
+
+    <div class="terms">
+      <input type="checkbox" id="termsCheck"/>
+      <label for="termsCheck">I agree to H2P Vision's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+    </div>
+
+    <div class="error-box" id="regErrBox"></div>
+
+    <button class="submit-btn" onclick="doRegister()" id="regBtn">
+      <span id="regText">Create Account</span>
+      <div class="spinner" id="regSpinner"></div>
+    </button>
+
+    <div class="divider">or</div>
+    <div class="switch-link">Already have an account? <a href="/login">Sign in →</a></div>
+
+    <div class="mini-badges">
+      <div class="mini-badge"><span>🔒</span> Secure</div>
+      <div class="mini-badge"><span>🛡️</span> No spam</div>
+      <div class="mini-badge"><span>✅</span> Free forever</div>
+    </div>
+  </div>
+
+  <div class="success-state" id="successState">
+    <div class="success-emoji">🎉</div>
+    <div class="success-title">Account Created!</div>
+    <div class="success-sub">Welcome to H2P Vision! Redirecting to login...</div>
+  </div>
+
+</div>
+
+<script>
+function togglePass(id, btn){
+  const inp = document.getElementById(id);
+  if(inp.type === 'password'){ inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+function checkStrength(pass){
+  const fill = document.getElementById('strengthFill');
+  const text = document.getElementById('strengthText');
+  if(!pass){ fill.style.width = '0%'; text.textContent = ''; return; }
+  let score = 0;
+  if(pass.length >= 8) score++;
+  if(/[A-Z]/.test(pass)) score++;
+  if(/[0-9]/.test(pass)) score++;
+  if(/[^A-Za-z0-9]/.test(pass)) score++;
+  const levels = [
+    { w:'25%', c:'#dc2626', t:'Weak' },
+    { w:'50%', c:'#d97706', t:'Fair' },
+    { w:'75%', c:'#2563eb', t:'Good' },
+    { w:'100%', c:'#16a34a', t:'Strong 💪' },
+  ];
+  const l = levels[score - 1] || levels[0];
+  fill.style.width = l.w;
+  fill.style.background = l.c;
+  text.textContent = l.t;
+  text.style.color = l.c;
+}
+
+function validateEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+async function doRegister(){
+  const fn = document.getElementById('firstName').value.trim();
+  const ln = document.getElementById('lastName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const confirm = document.getElementById('confirmPass').value;
+  const terms = document.getElementById('termsCheck').checked;
+  const errBox = document.getElementById('regErrBox');
+
+  // Clear errors
+  ['fnErr','regEmailErr','regPassErr','confirmErr'].forEach(id => document.getElementById(id).style.display = 'none');
+  ['firstName','regEmail','regPass','confirmPass'].forEach(id => document.getElementById(id).classList.remove('error'));
+  errBox.style.display = 'none';
+
+  let valid = true;
+  if(!fn){ document.getElementById('fnErr').style.display = 'block'; document.getElementById('firstName').classList.add('error'); valid = false; }
+  if(!validateEmail(email)){ document.getElementById('regEmailErr').style.display = 'block'; document.getElementById('regEmail').classList.add('error'); valid = false; }
+  if(pass.length < 8){ document.getElementById('regPassErr').style.display = 'block'; document.getElementById('regPass').classList.add('error'); valid = false; }
+  if(pass !== confirm){ document.getElementById('confirmErr').style.display = 'block'; document.getElementById('confirmPass').classList.add('error'); valid = false; }
+  if(!terms){ errBox.textContent = 'Please accept the Terms of Service to continue'; errBox.style.display = 'block'; valid = false; }
+  if(!valid) return;
+
+  const btn = document.getElementById('regBtn');
+  const spinner = document.getElementById('regSpinner');
+  const regText = document.getElementById('regText');
+  btn.disabled = true;
+  regText.textContent = 'Creating account...';
+  spinner.style.display = 'block';
+
+  try{
+    const res = await fetch('/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ name: fn + ' ' + ln, email, password: pass })
+    });
+    const data = await res.json();
+
+    if(res.ok || res.status === 201){
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+      setTimeout(() => window.location.href = '/login', 2000);
+    } else {
+      errBox.textContent = data.error || 'Registration failed. Try again.';
+      errBox.style.display = 'block';
+    }
+  } catch(e){
+    errBox.textContent = 'Connection error. Please try again.';
+    errBox.style.display = 'block';
+  } finally{
+    btn.disabled = false;
+    regText.textContent = 'Create Account';
+    spinner.style.display = 'none';
+  }
+}
+
+document.addEventListener('keydown', e => { if(e.key === 'Enter') doRegister(); });
+if(localStorage.getItem('h2p_token')) window.location.href = '/home';
+</script>
+</body>
+</html>

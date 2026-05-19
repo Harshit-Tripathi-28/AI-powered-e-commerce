@@ -514,7 +514,7 @@ async function loadProduct(){
     // Try real API first
     let product=null;
     try{
-      const res=await fetch(`/products/${id}`);
+      const res=await fetch(`/api/products/${id}`);
       if(res.ok) product=await res.json();
     }catch(e){}
 
@@ -665,7 +665,7 @@ async function loadSimilar(brand,title){
         const price=p.price||p.final_price||999;
         const emojis=['📱','👗','⌚','🎧','👟','💻','📷','🕶️'];
         const emoji=emojis[Math.floor(Math.random()*emojis.length)];
-        return `<div class="sim-card" onclick="window.location='/products/${p.product_id||p.asin||''}'">
+        return `<div class="sim-card" onclick="window.location='/product-page/${p.asin || p.product_id || ''}'">
           <div class="sim-img">${p.image_url?`<img src="${p.image_url}" onerror="this.style.display='none'"/>`:''}${!p.image_url?emoji:''}</div>
           <div class="sim-info">
             <div class="sim-name">${p.title||p.name||'Product'}</div>

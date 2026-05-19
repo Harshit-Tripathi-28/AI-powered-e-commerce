@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – H2P Vision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--navy:#0A0F1E;--navy2:#0D1B2A;--red:#CC0000;--red2:#FF2020;--orange:#FFB700;--pink:#FF4EA0;--purple:#A855F7;--cyan:#00D4FF;--light:#F5F6FA;--white:#fff;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--grad-logo:linear-gradient(135deg,#FFB700,#FF4EA0,#A855F7,#00D4FF);--grad-red:linear-gradient(135deg,#FF2020,#CC0000);}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--navy);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+
+    /* Background orbs */
+    body::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,#FF4EA020,transparent 65%);pointer-events:none;}
+    body::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;background:radial-gradient(circle,#A855F720,transparent 65%);pointer-events:none;}
+
+    /* CARD */
+    .auth-card{background:white;border-radius:24px;width:100%;max-width:440px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative;z-index:2;animation:slideUp .5s ease;}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+    /* LOGO */
+    .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;}
+    .auth-logo img{height:44px;width:44px;object-fit:contain;}
+    .auth-logo .n{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;background:var(--grad-red);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .auth-logo .t{font-size:.6rem;color:var(--muted);letter-spacing:1.5px;font-style:italic;}
+
+    .auth-title{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+    .auth-sub{font-size:.85rem;color:var(--muted);margin-bottom:28px;}
+
+    /* FORM */
+    .form-group{margin-bottom:18px;}
+    .form-label{display:block;font-size:.8rem;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:.3px;}
+    .form-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s,box-shadow .2s;color:var(--text);}
+    .form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,183,0,.15);}
+    .form-input.error{border-color:var(--red2);}
+
+    .pass-wrap{position:relative;}
+    .pass-wrap .form-input{padding-right:44px;}
+    .eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--muted);}
+
+    .forgot{display:block;text-align:right;font-size:.78rem;color:var(--orange);text-decoration:none;margin-top:6px;}
+    .forgot:hover{text-decoration:underline;}
+
+    .error-msg{font-size:.75rem;color:var(--red2);margin-top:4px;display:none;}
+
+    .submit-btn{width:100%;background:linear-gradient(135deg,var(--red),var(--red2));color:white;border:none;padding:14px;border-radius:10px;font-size:.95rem;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .submit-btn:hover{filter:brightness(1.1);transform:translateY(-1px);}
+    .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+    .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:.78rem;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    .switch-link{text-align:center;font-size:.85rem;color:var(--muted);}
+    .switch-link a{color:var(--red);font-weight:600;text-decoration:none;}
+    .switch-link a:hover{text-decoration:underline;}
+
+    /* Trust badges */
+    .mini-badges{display:flex;justify-content:center;gap:20px;margin-top:20px;padding-top:18px;border-top:1px solid var(--border);}
+    .mini-badge{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);}
+
+    /* Success state */
+    .success-state{text-align:center;display:none;}
+    .success-emoji{font-size:3.5rem;margin-bottom:12px;}
+    .success-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:8px;}
+    .success-sub{font-size:.85rem;color:var(--muted);}
+
+    /* Loading spinner */
+    .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+<div class="auth-card">
+
+  <!-- Logo -->
+  <div class="auth-logo">
+    <img src="/static/logo.svg" alt="H2P Vision" onerror="this.style.display='none'"/>
+    <div><div class="n">H2P Vision</div><div class="t">Trust before you buy</div></div>
+  </div>
+
+  <!-- Login Form -->
+  <div id="loginForm">
+    <div class="auth-title">Welcome back 👋</div>
+    <div class="auth-sub">Sign in to your H2P Vision account</div>
+
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="loginEmail" placeholder="you@example.com"/>
+      <div class="error-msg" id="emailErr">Please enter a valid email</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="pass-wrap">
+        <input class="form-input" type="password" id="loginPass" placeholder="Enter your password"/>
+        <button class="eye-btn" onclick="togglePass('loginPass', this)">👁</button>
+      </div>
+      <a href="#" class="forgot">Forgot password?</a>
+      <div class="error-msg" id="passErr">Password is required</div>
+    </div>
+
+    <div class="error-msg" id="loginErr" style="display:none;font-size:.82rem;background:#fff1f2;padding:10px 12px;border-radius:8px;border-left:3px solid var(--red2);margin-bottom:8px;"></div>
+
+    <button class="submit-btn" onclick="doLogin()" id="loginBtn">
+      <span id="loginText">Sign In</span>
+      <div class="spinner" id="loginSpinner"></div>
+    </button>
+
+    <div class="divider">or</div>
+
+    <div class="switch-link">
+      Don't have an account? <a href="/register">Create one →</a>
+    </div>
+
+    <div class="mini-badges">
+      <div class="mini-badge"><span>🔒</span> Secure login</div>
+      <div class="mini-badge"><span>🛡️</span> JWT protected</div>
+      <div class="mini-badge"><span>✅</span> Trusted platform</div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="success-state" id="successState">
+    <div class="success-emoji">🎉</div>
+    <div class="success-title">Login Successful!</div>
+    <div class="success-sub">Redirecting you to H2P Vision...</div>
+  </div>
+
+</div>
+
+<script>
+function togglePass(id, btn){
+  const inp = document.getElementById(id);
+  if(inp.type === 'password'){ inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁'; }
+}
+
+function validateEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
+
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const btn = document.getElementById('loginBtn');
+  const spinner = document.getElementById('loginSpinner');
+  const loginText = document.getElementById('loginText');
+  const errBox = document.getElementById('loginErr');
+
+  // Clear errors
+  document.getElementById('emailErr').style.display = 'none';
+  document.getElementById('passErr').style.display = 'none';
+  errBox.style.display = 'none';
+  document.getElementById('loginEmail').classList.remove('error');
+  document.getElementById('loginPass').classList.remove('error');
+
+  // Validate
+  let valid = true;
+  if(!validateEmail(email)){ document.getElementById('emailErr').style.display = 'block'; document.getElementById('loginEmail').classList.add('error'); valid = false; }
+  if(!pass){ document.getElementById('passErr').style.display = 'block'; document.getElementById('loginPass').classList.add('error'); valid = false; }
+  if(!valid) return;
+
+  // Loading
+  btn.disabled = true;
+  loginText.textContent = 'Signing in...';
+  spinner.style.display = 'block';
+
+  try{
+    const res = await fetch('/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+
+    if(res.ok){
+      // Save token and user info
+      localStorage.setItem('h2p_token', data.token);
+      localStorage.setItem('h2p_email', email);
+      localStorage.setItem('h2p_name', data.name || email.split('@')[0]);
+
+      // Show success
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+
+      // Redirect
+      const redirect = new URLSearchParams(window.location.search).get('redirect') || 'home';
+      setTimeout(() => window.location.href = '/' + redirect, 1500);
+    } else {
+      errBox.textContent = data.error || 'Invalid email or password';
+      errBox.style.display = 'block';
+    }
+  } catch(e){
+    errBox.textContent = 'Connection error. Please try again.';
+    errBox.style.display = 'block';
+  } finally{
+    btn.disabled = false;
+    loginText.textContent = 'Sign In';
+    spinner.style.display = 'none';
+  }
+}
+
+// Enter key
+document.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+
+// Already logged in?
+if(localStorage.getItem('h2p_token')) window.location.href = '/home';
+</script>
+</body>
+</html>

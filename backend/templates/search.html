@@ -208,7 +208,9 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 function renderCard(p){
   const score=p.trust_score?Math.round(p.trust_score*100):Math.floor(Math.random()*40+55);
   const tc=trustClass(score);
-  const price=p.price||parseFloat(p.final_price)||999;
+  let raw2=p.price||p.final_price||null;
+  let price=999;
+  if(raw2){let c2=String(raw2).replace(/['"₹,]/g,'').trim();let n2=parseFloat(c2);if(!isNaN(n2)&&n2>0){price=n2<500?Math.round(n2*83):Math.round(n2);price=Math.round(price/100)*100-1;}}
   const title=p.title||p.name||'Product';
   const brand=p.brand||p.store||'H2P Store';
   const rating=p.rating||p.stars||(Math.random()*1.5+3.5).toFixed(1);
@@ -238,7 +240,7 @@ function renderCard(p){
         ${op?`<span class="price-old">&#8377;${op.toLocaleString('en-IN')}</span>`:''}
         ${disc?`<span class="price-off">${disc}% off</span>`:''}
       </div>
-      <button class="btn-add" onclick="event.stopPropagation();addToCart('${title.substring(0,20)}')">🛒 Add to Cart</button>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('${title}',{title:'${title.replace(/'/g,'')}'.substring(0,80),brand:'${brand}',price:${price},image_url:'${imgSrc||''}',asin:'${pid}',qty:1})">🛒 Add to Cart</button>
     </div>
   </div>`;
 }
@@ -282,10 +284,15 @@ function sortProducts(by){
 }
 
 let cartCount=0;
-function addToCart(name){
-  cartCount++;
-  document.getElementById('cartCount').textContent=cartCount;
-  showToast('✅ "'+name+'..." added to cart!');
+function addToCart(name, item){
+  const cart=JSON.parse(localStorage.getItem('h2p_cart')||'[]');
+  const cartItem=item||{title:name,brand:'H2P Store',price:999,image_url:'',asin:Date.now().toString(),qty:1};
+  const existing=cart.find(c=>c.asin===cartItem.asin);
+  if(existing){existing.qty=(existing.qty||1)+1;}else{cart.push(cartItem);}
+  localStorage.setItem('h2p_cart',JSON.stringify(cart));
+  const total=cart.reduce((s,i)=>s+(i.qty||1),0);
+  document.getElementById('cartCount').textContent=total;
+  showToast('✅ "'+name.substring(0,25)+'..." added to cart!');
 }
 
 // Load search results
@@ -295,7 +302,7 @@ async function loadSearch(){
   document.getElementById('searchInput').value=decodeURIComponent(q);
 
   try{
-    const res = await fetch('/api/search?q=' + q);
+    const res=await fetch('/api/search?q='+encodeURIComponent(q));
     const data=await res.json();
     if(data&&data.length){
       allProducts=data;
@@ -305,10 +312,9 @@ async function loadSearch(){
       document.getElementById('resultCount').textContent='No results found';
       document.getElementById('productGrid').innerHTML=`<div class="empty-wrap"><div class="empty-emoji">🔍</div><div class="empty-title">No results for "${decodeURIComponent(q)}"</div><div class="empty-sub">Try searching something else.</div></div>`;
     }
-  } catch(e) {
-    console.error('Search error:', e);
-    document.getElementById('resultCount').textContent = 'Error: ' + e.message;
-    document.getElementById('productGrid').innerHTML = `<div class="empty-wrap"><div class="empty-emoji">⚠️</div><div class="empty-title">Error: ${e.message}</div></div>`;
+  }catch(e){
+    document.getElementById('resultCount').textContent='Error loading results';
+    document.getElementById('productGrid').innerHTML=`<div class="empty-wrap"><div class="empty-emoji">⚠️</div><div class="empty-title">Could not load results</div><div class="empty-sub">Please try again.</div></div>`;
   }
 }
 

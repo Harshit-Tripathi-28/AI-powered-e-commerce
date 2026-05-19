@@ -50,6 +50,20 @@ def create_app():
     @app.route("/compare")
     def compare_page():
         return render_template("compare.html")
+    @app.route("/cart")
+    def cart_page():
+        return render_template("cart.html")
+
+    @app.route("/login")
+    def login_page():
+        return render_template("login.html")
+
+    @app.route("/register")
+    def register_page():
+        return render_template("register.html")
+    @app.route("/checkout")
+    def checkout_page():
+        return render_template("checkout.html")
     return app
 
 if __name__ == "__main__":

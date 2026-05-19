@@ -309,14 +309,14 @@
     <a href="#" class="sec-link">View all →</a>
   </div>
   <div class="cat-grid">
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">📱</div><div class="cat-name">Electronics</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8)">👗</div><div class="cat-name">Fashion</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">🏠</div><div class="cat-name">Home & Kitchen</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">💄</div><div class="cat-name">Beauty</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)">👟</div><div class="cat-name">Shoes</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">⚽</div><div class="cat-name">Sports</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd)">📚</div><div class="cat-name">Books</div></a>
-    <a href="#" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef9c3,#fef08a)">🧸</div><div class="cat-name">Toys</div></a>
+    <a onclick="filterByCategory('Electronics')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">📱</div><div class="cat-name">Electronics</div></a>
+    <a onclick="filterByCategory('Clothing')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8)">👗</div><div class="cat-name">Fashion</div></a>
+    <a onclick="filterByCategory('Home')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#dcfce7,#bbf7d0)">🏠</div><div class="cat-name">Home & Kitchen</div></a>
+    <a onclick="filterByCategory('Beauty')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">💄</div><div class="cat-name">Beauty</div></a>
+    <a onclick="filterByCategory('Shoes')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe)">👟</div><div class="cat-name">Shoes</div></a>
+    <a onclick="filterByCategory('Sports')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#ffedd5,#fed7aa)">⚽</div><div class="cat-name">Sports</div></a>
+    <a onclick="filterByCategory('Books')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#e0f2fe,#bae6fd)">📚</div><div class="cat-name">Books</div></a>
+    <a onclick="filterByCategory('Toys')" class="cat-card"><div class="cat-icon" style="background:linear-gradient(135deg,#fef9c3,#fef08a)">🧸</div><div class="cat-name">Toys</div></a>
   </div>
 </section>
 
@@ -430,20 +430,27 @@ function starHTML(r){const f=Math.floor(parseFloat(r)||0);let s='';for(let i=0;i
 function renderCard(p){
   const score=p.trust_score?Math.round(p.trust_score*100):Math.floor(Math.random()*40+55);
   const tc=trustClass(score);
-  const price=p.price||p.final_price||999;
+  let raw=p.price||p.final_price||null;
+  let price=999;
+  if(raw){let c=String(raw).replace(/['"₹,]/g,'').trim();let n=parseFloat(c);if(!isNaN(n)&&n>0){price=n<500?Math.round(n*83):Math.round(n);price=Math.round(price/100)*100-1;}}
   const title=p.title||p.name||'Product';
   const brand=p.brand||p.store||'H2P Store';
   const rating=p.rating||p.stars||(Math.random()*1.5+3.5).toFixed(1);
   const emojis=['📱','👗','⌚','🎧','👟','💻','📷','🕶️','🎮','🏋️'];
   const emoji=emojis[Math.floor(Math.random()*emojis.length)];
-  const imgSrc=p.image_url||p.image||null;
   const badge=Math.random()>0.6?`<div class="badge-sale">SALE</div>`:`<div class="badge-new">NEW</div>`;
   const op=typeof price==='number'?Math.round(price*1.25):'';
   const disc=op?Math.round((1-price/op)*100):'';
-  const pid=p.product_id||p.asin||'demo';
-  const qp='title='+encodeURIComponent(title)+'&price='+price+'&brand='+encodeURIComponent(brand)+'&rating='+rating+'&score='+score+'&img='+encodeURIComponent(p.image_url||'');
-  return `<div class="product-card" onclick="window.location='/product-page/${pid}?${qp}'">
-    <div class="product-img" style="position:relative;">${badge}<button class="wishlist-btn" onclick="event.stopPropagation()">🤍</button>${imgSrc?`<img src="${imgSrc}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>`:''}${!imgSrc?`<span style='font-size:3.5rem'>${emoji}</span>`:''}</div>
+  return `<div class="product-card" onclick="window.location='/product-page/${p.asin || p.product_id || ''}'">
+    <div class="product-img">
+      ${badge}
+      <button class="wishlist-btn" onclick="event.stopPropagation()">🤍</button>
+      ${
+        p.image_url
+          ? `<img src="${p.image_url}" alt="${title}" style="width:100%;height:100%;object-fit:contain;padding:20px;" onerror="this.style.display='none'; this.parentElement.insertAdjacentHTML('beforeend','<div style=&quot;font-size:3.5rem;&quot;>📦</div>')">`
+          : `<div style="font-size:3.5rem;">📦</div>`
+      }
+    </div>
     <div class="product-info">
       <div class="product-brand">${brand}</div>
       <div class="product-name">${title}</div>
@@ -457,28 +464,80 @@ function renderCard(p){
         ${op?`<span class="price-old">₹${op.toLocaleString('en-IN')}</span>`:''}
         ${disc?`<span class="price-off">${disc}% off</span>`:''}
       </div>
-      <button class="btn-add" onclick="event.stopPropagation();addToCart('${title.substring(0,20)}')">🛒 Add to Cart</button>
+      <button class="btn-add" 
+      data-title="${title}" 
+      data-brand="${brand}" 
+      data-price="${typeof price==='number'?price:999}" 
+      data-img="${p.image_url||''}" 
+      data-asin="${p.asin || p.product_id || Date.now()}" 
+      data-trust="${score}" 
+      onclick="event.stopPropagation();addToCartFromBtn(this)">
+      🛒 Add to Cart
+      </button>
     </div>
   </div>`;
 }
 
 const demoProducts=[
-  {title:'Wireless Noise-Cancelling Headphones',brand:'SoundMax',price:2499,rating:4.5,trust_score:.88,image_url:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80'},
-  {title:"Men's Running Shoes Ultra Flex",brand:'SwiftStep',price:1299,rating:4.2,trust_score:.72,image_url:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80'},
-  {title:'Smart Watch Pro Series 5',brand:'TimeTech',price:3999,rating:4.7,trust_score:.91,image_url:'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&q=80'},
-  {title:'Portable Bluetooth Speaker 360',brand:'BeatBox',price:899,rating:3.9,trust_score:.55,image_url:'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80'},
-  {title:'4K Ultra HD Action Camera',brand:'CapturePro',price:5499,rating:4.4,trust_score:.83,image_url:'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&q=80'},
-  {title:"Women's Casual Printed Dress",brand:'StyleHub',price:699,rating:4.1,trust_score:.68,image_url:'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&q=80'},
-  {title:'Gaming Mechanical Keyboard RGB',brand:'KeyStrike',price:1899,rating:4.6,trust_score:.87,image_url:'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&q=80'},
-  {title:'Stainless Steel Water Bottle',brand:'HydroFit',price:349,rating:4.3,trust_score:.79,image_url:'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80'},
-  {title:'Organic Face Moisturizer SPF30',brand:'GlowLab',price:549,rating:3.7,trust_score:.44,image_url:'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&q=80'},
-  {title:'Laptop Backpack Anti-Theft 35L',brand:'SafePack',price:1199,rating:4.5,trust_score:.85,image_url:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80'},
+  {title:'Wireless Noise-Cancelling Headphones',brand:'SoundMax',price:2499,rating:4.5,trust_score:.88},
+  {title:"Men's Running Shoes Ultra Flex",brand:'SwiftStep',price:1299,rating:4.2,trust_score:.72},
+  {title:'Smart Watch Pro Series 5',brand:'TimeTech',price:3999,rating:4.7,trust_score:.91},
+  {title:'Portable Bluetooth Speaker 360',brand:'BeatBox',price:899,rating:3.9,trust_score:.55},
+  {title:'4K Ultra HD Action Camera',brand:'CapturePro',price:5499,rating:4.4,trust_score:.83},
+  {title:"Women's Casual Printed Dress",brand:'StyleHub',price:699,rating:4.1,trust_score:.68},
+  {title:'Gaming Mechanical Keyboard RGB',brand:'KeyStrike',price:1899,rating:4.6,trust_score:.87},
+  {title:'Stainless Steel Water Bottle',brand:'HydroFit',price:349,rating:4.3,trust_score:.79},
+  {title:'Organic Face Moisturizer SPF30',brand:'GlowLab',price:549,rating:3.7,trust_score:.44},
+  {title:'Laptop Backpack Anti-Theft 35L',brand:'SafePack',price:1199,rating:4.5,trust_score:.85},
 ];
+
+
+// ── Filter by category ──
+// Category keyword map
+const catKeywords = {
+  'Electronics': ['phone','laptop','camera','headphone','watch','speaker','keyboard','electronic','tablet','computer'],
+  'Clothing': ['shirt','dress','top','jacket','jeans','kurta','saree','cloth','wear','apparel','fashion','t-shirt'],
+  'Home': ['home','kitchen','furniture','decor','curtain','bedsheet','pillow','cookware','appliance'],
+  'Beauty': ['moisturizer','cream','serum','lipstick','foundation','makeup','skincare','beauty','lotion','shampoo'],
+  'Shoes': ['shoe','sneaker','boot','sandal','slipper','footwear','running','heel'],
+  'Sports': ['sport','gym','fitness','yoga','cricket','football','basketball','badminton','dumbbell'],
+  'Books': ['book','novel','guide','textbook','fiction','non-fiction'],
+  'Toys': ['toy','game','puzzle','lego','doll','action figure','kids'],
+};
+
+async function filterByCategory(cat){
+  const grid = document.getElementById('productGrid');
+  document.getElementById('trust').scrollIntoView({behavior:'smooth'});
+  grid.innerHTML = '<div class="loading-spinner">Loading ' + cat + ' products...</div>';
+
+  // Highlight selected category
+  document.querySelectorAll('.cat-card').forEach(c => c.style.borderColor = '');
+  event.currentTarget.style.borderColor = 'var(--orange)';
+
+  try{
+    const res = await fetch('/api/search?q=' + encodeURIComponent(cat));
+    const data = await res.json();
+    if(data && data.length > 0){
+      grid.innerHTML = data.slice(0,10).map(renderCard).join('');
+      return;
+    }
+  } catch(e){}
+
+  // Fallback: filter demo products by keywords
+  const keywords = catKeywords[cat] || [cat.toLowerCase()];
+  const filtered = demoProducts.filter(p => {
+    const text = ((p.title||'') + ' ' + (p.brand||'')).toLowerCase();
+    return keywords.some(k => text.includes(k));
+  });
+  grid.innerHTML = (filtered.length ? filtered : demoProducts).map(renderCard).join('');
+}
 
 async function loadProducts(){
   const grid=document.getElementById('productGrid');
+  grid.innerHTML='<div class="loading-spinner">Loading trusted products...</div>';
   try{
-    const res = await fetch('/api/products?limit=10');
+    const res=await fetch('/api/products?limit=10');
+    if(!res.ok) throw new Error('API error');
     const data=await res.json();
     grid.innerHTML=data&&data.length>0?data.map(renderCard).join(''):demoProducts.map(renderCard).join('');
   }catch(e){
@@ -486,15 +545,107 @@ async function loadProducts(){
   }
 }
 
-let cartCount=0;
-function addToCart(name){
-  cartCount++;
-  document.getElementById('cartCount').textContent=cartCount;
-  const t=document.createElement('div');
-  t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:#0A0F1E;color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;font-family:DM Sans,sans-serif;border-left:4px solid #FFB700;box-shadow:0 8px 30px rgba(0,0,0,.3);';
-  t.textContent=`✅ "${name}..." added to cart!`;
+// ── Add to cart from product card button ──
+function addToCartFromBtn(btn){
+  let item;
+  try{
+    // New approach: JSON in data-cart attribute
+    const cartAttr = btn.getAttribute('data-cart');
+    if(cartAttr) item = JSON.parse(cartAttr.replace(/&quot;/g,'"'));
+    else throw new Error('no data-cart');
+  } catch(e){
+    // Fallback: individual data attributes
+    item = {
+      title: btn.dataset.title || 'Product',
+      brand: btn.dataset.brand || 'H2P Store',
+      price: parseFloat(btn.dataset.price) || 999,
+      image_url: btn.dataset.img || '',
+      trust_score: parseFloat(btn.dataset.trust)/100 || 0.7,
+      asin: btn.dataset.asin || Date.now().toString(),
+      qty: 1
+    };
+  }
+  const cart = JSON.parse(localStorage.getItem('h2p_cart') || '[]');
+  const existing = cart.find(c => c.asin === item.asin);
+  if(existing){ existing.qty = (existing.qty||1)+1; }
+  else { cart.push(item); }
+  localStorage.setItem('h2p_cart', JSON.stringify(cart));
+  const total = cart.reduce((s,i) => s+(i.qty||1), 0);
+  document.getElementById('cartCount').textContent = total;
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:#0A0F1E;color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;font-family:DM Sans,sans-serif;border-left:4px solid #FFB700;box-shadow:0 8px 30px rgba(0,0,0,.3);';
+  t.textContent = '✅ "' + (item.title||'Product').substring(0,25) + '..." added to cart!';
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(),3000);
+  setTimeout(()=>t.remove(), 3000);
+}
+
+// ── NAVBAR: show user name if logged in ──
+function updateNavAuth(){
+  const name = localStorage.getItem('h2p_name');
+  const email = localStorage.getItem('h2p_email');
+  const loginBtn = document.querySelector('.nav-login');
+  if(name && email && loginBtn){
+    loginBtn.innerHTML = '👤 ' + name.split(' ')[0];
+    loginBtn.href = '/cart';
+    loginBtn.title = email;
+    loginBtn.style.color = '#FFB700';
+    loginBtn.style.borderColor = '#FFB70060';
+  }
+}
+updateNavAuth();
+
+// ── CART: load count from localStorage ──
+function loadCartCount(){
+  const cart = JSON.parse(localStorage.getItem('h2p_cart') || '[]');
+  const total = cart.reduce((s,i) => s + (i.qty||1), 0);
+  document.getElementById('cartCount').textContent = total || 0;
+}
+loadCartCount();
+
+function addToCart(name, p){
+  // Build cart item from product object or name
+  const item = p ? {
+    title: p.title || name,
+    brand: p.brand || 'H2P Store',
+    price: p.price || p.final_price || 999,
+    image_url: p.image_url || '',
+    trust_score: p.trust_score || 0.7,
+    asin: p.asin || p.product_id || Date.now().toString(),
+    qty: 1
+  } : {
+    title: name,
+    brand: 'H2P Store',
+    price: 999,
+    image_url: '',
+    trust_score: 0.7,
+    asin: Date.now().toString(),
+    qty: 1
+  };
+
+  // Load existing cart
+  const cart = JSON.parse(localStorage.getItem('h2p_cart') || '[]');
+
+  // Check if already exists
+  const existing = cart.find(c => c.asin === item.asin);
+  if(existing){
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push(item);
+  }
+
+  // Save
+  localStorage.setItem('h2p_cart', JSON.stringify(cart));
+
+  // Update count
+  const total = cart.reduce((s,i) => s + (i.qty||1), 0);
+  document.getElementById('cartCount').textContent = total;
+
+  // Toast
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:#0A0F1E;color:white;padding:14px 22px;border-radius:10px;font-size:.85rem;font-family:DM Sans,sans-serif;border-left:4px solid #FFB700;box-shadow:0 8px 30px rgba(0,0,0,.3);';
+  t.textContent = '✅ "' + item.title.substring(0,25) + '..." added to cart!';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
 }
 
 loadProducts();
